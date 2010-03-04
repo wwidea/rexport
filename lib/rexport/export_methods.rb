@@ -247,6 +247,8 @@ module Rexport #:nodoc:
           end
         end
         
+        export_items.reset
+        
         position = 0
         rexport_fields.each do |rexport_field|
           position += 1
