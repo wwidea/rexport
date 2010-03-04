@@ -1,0 +1,59 @@
+<h1><%= @export.name %></h1>
+<div id="custom_export_options">
+  <h4>Options</h4>
+  <ul>
+    <li><%= link_to("#{image_tag('icon_edit.gif')} Edit", edit_export_path(@export)) if @export.modifiable? %></li>
+    <li><%= link_to "#{image_tag('icon_export.png')} Export", export_path(@export, :format => :csv)  %></li>
+    <li><%= link_to "#{image_tag('icon_copy.png')} Copy", exports_path(:original_export_id => @export.id), :method => :post %></li>
+  </ul>
+</div>
+<div class="show_export_info">
+  <p>
+    <label>Category:</label>
+    <%= @export.model_name %>
+  </p>
+  </div>
+  <div class="show_export_info">
+  <p>
+    <label>Description:</label>
+  </p>
+    <%= simple_format @export.description %>
+</div>
+
+<table>
+  <caption>Export Items</caption>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Export Field</th>
+      <th class='action_icons'>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody id="export_items">
+    <%= render :partial => @export.export_items.ordered %>
+  </tbody>
+</table>
+
+<%= content_tag(:p, 'Drag and drop the rows in the table above to re-order the export data left to right in the output (see sample below).', :class => 'instructions') if @export.modifiable? %>
+
+<%= sortable_element(:export_items,
+  :tag => 'tr',
+  :url => export_item_sorting_path,
+  :method => :put) if @export.modifiable?
+%>
+
+<%= render(:partial => 'filters') unless @export.export_filters.blank? %>
+
+<div class='scrolling'>
+  <table>
+    <caption>Sample Output (first <%= Rexport::SAMPLE_SIZE %> records)</caption>
+    <tr>
+      <%= @export.header.map {|heading| content_tag(:th, heading)} * '' %>
+    </tr>
+    <% for record in @export.sample_records %>
+      <tr class="<%= cycle('odd','even') %>">
+        <%= record.map { |item| content_tag(:td, item) } * ''  %>
+      </tr>
+    <% end %>
+  </table>
+</div>

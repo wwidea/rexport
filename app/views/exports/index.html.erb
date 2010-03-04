@@ -1,0 +1,31 @@
+<% form_for Export.new, :url => new_export_path, :html => {:method => :get} do |f| %>
+  <fieldset>
+    <legend>Create New Export</legend>
+    <div class='dropdown'>
+      <%= f.select :model_name, Export.models %>
+      <%= f.submit 'Create' %>
+    </div>
+  </fieldset>
+<% end %>
+
+<table>
+  <caption>Export List</caption>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th class='action_icons wider'>&nbsp;</th>
+  </tr>
+
+  <% for export in @exports %>
+    <tr class="<%= cycle('odd', 'even') %>">
+      <td class="row_title"><%= link_to export.full_name, export %></td>
+      <td class='description'><%= export.description %></td>
+      <td class="table_icons">
+        <%= link_to_export export_path(export, :format => :csv), :text => false  %>
+        <%= link_to_show export, :text => false %>
+        <%= link_to(image_tag('icon_edit.gif'), edit_export_path(export), :title => 'Edit') if export.modifiable? %>
+        <%= link_to_delete(export, :text => false) if export.modifiable? %>
+      </td>
+    </tr>
+  <% end %>
+</table>

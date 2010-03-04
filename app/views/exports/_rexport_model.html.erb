@@ -1,0 +1,17 @@
+<table class='series'>
+  <caption><%= rexport_model.name %> (<%= rexport_model.path %>)</caption>
+  <tr>
+    <th>Export</th>
+    <th>Data Field</th>
+    <th>Filter Value</th>
+  </tr>
+  <% for field in rexport_model.rexport_fields_array %>
+    <tr class="<%= cycle('odd','even') %>">
+      <td><%= check_box_tag "export[rexport_fields][#{rexport_model.field_path(field.name)}]", 1, @export.has_rexport_field?(rexport_model.field_path(field.name))  %></td>
+      <td class="row_title"><%= field.name.titleize %></td>
+      <td class='row_title'>
+        <%= filter_value_field(rexport_model, field) %>
+      </td>
+    </tr>
+  <% end %>
+</table>

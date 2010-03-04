@@ -1,0 +1,25 @@
+<div id="rexport">
+  <% form_for(@export) do |f| %>
+    <%= f.error_messages %>
+    
+      <div class="export_base_info">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
+      <div  class="export_base_info">
+        <%= f.label :description %>
+        <%= f.text_area :description %>
+      </div>
+
+    <%= render :partial => 'local_form', :locals => { :form => f } %>
+  
+    <h3>Export Items</h3>
+    <%= render :partial => 'rexport_model', :collection => @export.rexport_models %>
+  
+    <%= f.hidden_field :model_name %>
+  
+    <div>
+      <%= f.submit 'Save Export' %>
+    </div>
+  <% end %>
+</div>

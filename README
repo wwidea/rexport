@@ -1,0 +1,18 @@
+Rexport
+=======
+
+Ruby on Rails plugin to manage exports
+
+Installation
+============
+1) install plugin
+2) copy migration into application db/migrate folder and run
+
+
+Example
+=======
+
+Example goes here.
+
+
+Copyright (c) 2008 WWIDEA, released under the MIT license

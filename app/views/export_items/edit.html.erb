@@ -1,0 +1,15 @@
+<h1>Editing Export Item</h1>
+
+<% form_for(@export_item) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to_cancel export_path(@export_item.export) %>
