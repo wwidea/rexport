@@ -28,7 +28,7 @@ module Factories
   Factory.define :export do |e|
     e.name 'Enrollment Export'
     e.model_name 'Enrollment'
-    e.standard_key 'enrollment_export'
+    e.builtin_key 'enrollment_export'
     e.export_items do |items|
       %w(family_name_export_item grade_export_item status_name_export_item bogus_export_item).map do |item|
         items.association(item)

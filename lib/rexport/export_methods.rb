@@ -159,7 +159,7 @@ module Rexport #:nodoc:
       end
       
       def copy
-        returning self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :standard_key => nil)) do |new_export|
+        returning self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)) do |new_export|
           export_items.ordered.each { |item| new_export.export_items.create(item.attributes) }
           export_filters.each { |filter| new_export.export_filters.create(filter.attributes) }
           roles.each { |role| new_export.roles << role } if self.respond_to?(:roles)
@@ -167,7 +167,7 @@ module Rexport #:nodoc:
       end
       
       def modifiable?
-        standard_key.blank?
+        builtin_key.blank?
       end
       
       #########

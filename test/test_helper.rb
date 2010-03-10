@@ -65,7 +65,7 @@ class Test::Unit::TestCase
       create_table :exports do |t|
         t.string :name
         t.string :model_name
-        t.string :standard_key
+        t.string :builtin_key
       end
       
       create_table :export_items do |t|
