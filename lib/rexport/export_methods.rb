@@ -175,7 +175,7 @@ module Rexport #:nodoc:
       end
       
       def enabled?
-        get_records(:limit => 1).count > 0
+        export_model.count > 0
       end
       
       #########
