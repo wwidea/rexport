@@ -66,6 +66,10 @@ module Rexport #:nodoc:
       def models
         %w(override_this_method)
       end
+      
+      def enabled
+        find(:all).select {|export| export.enabled? }
+      end
     end
     
     module InstanceMethods
@@ -109,7 +113,7 @@ module Rexport #:nodoc:
         @rexport_models ||= get_rexport_models(export_model)
       end
       
-      # Retuns the records for the export
+      # Returns the records for the export
       def records
         @records ||= get_records
       end
@@ -168,6 +172,10 @@ module Rexport #:nodoc:
       
       def modifiable?
         builtin_key.blank?
+      end
+      
+      def enabled?
+        get_records(:limit => 1).count > 0
       end
       
       #########

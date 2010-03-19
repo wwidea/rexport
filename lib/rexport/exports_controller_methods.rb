@@ -2,7 +2,7 @@ module Rexport
   module ExportsControllerMethods
     # GET /exports
     def index
-      @exports = Export.categorical.alphabetical
+      @exports = Export.categorical.alphabetical.enabled
       
       respond_to do |format|
         format.html # index.html.erb
