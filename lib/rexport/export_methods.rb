@@ -79,7 +79,7 @@ module Rexport #:nodoc:
       
       # Returns a string with the export data
       def to_s
-        returning String.new do |result|
+        String.new.tap do |result|
           result << header * '|' << "\n"
           records.each do |record|
             result << record * '|' << "\n"
@@ -163,7 +163,7 @@ module Rexport #:nodoc:
       end
       
       def copy
-        returning self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)) do |new_export|
+        self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)).tap do |new_export|
           export_items.ordered.each { |item| new_export.export_items.create(item.attributes) }
           export_filters.each { |filter| new_export.export_filters.create(filter.attributes) }
           roles.each { |role| new_export.roles << role } if self.respond_to?(:roles)
@@ -219,7 +219,7 @@ module Rexport #:nodoc:
       end
       
       def build_conditions
-        returning Hash.new do |conditions|
+        Hash.new.tap do |conditions|
           export_filters.each do |filter|
             conditions[get_database_field(filter.field)] = filter.value
           end
