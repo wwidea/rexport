@@ -10,14 +10,14 @@ module ExportsHelper
       when :association
         association, text_method = field.method.split('.')
         select_tag( tag_name,
-              '<option value=""></option>' +
+              ('<option value=""></option>' +
               options_from_collection_for_select(
                 rexport_model.collection_from_association(association),
                 :id,
                 text_method,
-                value.to_i))
+                value.to_i)).html_safe)
       when :datetime, nil
-        '&nbsp;'
+        '&nbsp;'.html_safe
       else
         text_field_tag(tag_name, value)
     end

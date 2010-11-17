@@ -2,9 +2,9 @@
 <div id="custom_export_options">
   <h4>Options</h4>
   <ul>
-    <li><%= link_to("#{image_tag('icon_edit.gif')} Edit", edit_export_path(@export)) if @export.modifiable? %></li>
-    <li><%= link_to "#{image_tag('icon_export.png')} Export", export_path(@export, :format => :csv)  %></li>
-    <li><%= link_to "#{image_tag('icon_copy.png')} Copy", exports_path(:original_export_id => @export.id), :method => :post %></li>
+    <li><%= link_to("#{image_tag('icon_edit.gif')} Edit".html_safe, edit_export_path(@export)) if @export.modifiable? %></li>
+    <li><%= link_to "#{image_tag('icon_export.png')} Export".html_safe, export_path(@export, :format => :csv)  %></li>
+    <li><%= link_to "#{image_tag('icon_copy.png')} Copy".html_safe, exports_path(:original_export_id => @export.id), :method => :post %></li>
   </ul>
 </div>
 <div class="show_export_info">
@@ -48,11 +48,11 @@
   <table>
     <caption>Sample Output (first <%= Rexport::SAMPLE_SIZE %> records)</caption>
     <tr>
-      <%= @export.header.map {|heading| content_tag(:th, heading)} * '' %>
+      <%= (@export.header.map {|heading| content_tag(:th, heading)} * '').html_safe %>
     </tr>
     <% for record in @export.sample_records %>
       <tr class="<%= cycle('odd','even') %>">
-        <%= record.map { |item| content_tag(:td, item) } * ''  %>
+        <%= (record.map { |item| content_tag(:td, item) } * '').html_safe  %>
       </tr>
     <% end %>
   </table>
