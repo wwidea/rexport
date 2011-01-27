@@ -2,7 +2,7 @@ require 'test/unit'
 require 'rubygems'
 require 'active_record'
 require 'active_support/test_case'
-require File.dirname(__FILE__) + '/factories'
+require 'factories'
 require File.dirname(__FILE__) + '/../lib/rexport/data_fields'
 require File.dirname(__FILE__) + '/../lib/rexport/export_methods'
 require File.dirname(__FILE__) + '/../lib/rexport/export_item_methods'
@@ -11,9 +11,9 @@ require File.dirname(__FILE__) + '/../lib/rexport/tree_node'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
-RAILS_DEFAULT_LOGGER = Logger.new(File.join(File.dirname(__FILE__), '/log/test.log'))
-RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
-ActiveRecord::Base.logger = RAILS_DEFAULT_LOGGER
+# RAILS_DEFAULT_LOGGER = Logger.new(File.join(File.dirname(__FILE__), '/log/test.log'))
+# RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
+# ActiveRecord::Base.logger = RAILS_DEFAULT_LOGGER
 # ActionController::Base.logger = RAILS_DEFAULT_LOGGER
 
 class Test::Unit::TestCase

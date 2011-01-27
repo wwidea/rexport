@@ -9,7 +9,7 @@ module Rexport #:nodoc:
         belongs_to :export
         before_validation :replace_blank_name_with_rexport_field
         validates_presence_of :name, :rexport_field
-        named_scope :ordered, :order => 'position'
+        scope :ordered, :order => 'position'
       end
     end
     

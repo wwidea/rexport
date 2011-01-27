@@ -56,9 +56,9 @@ module Rexport #:nodoc:
         has_many :export_filters, :dependent => :destroy
         validates_presence_of :name, :model_name
         after_save :save_export_items
-        named_scope :alphabetical, :order => 'exports.name'
-        named_scope :categorical, :order => 'exports.model_name'
-        named_scope :by_model, lambda { |model_name| { :conditions => { :model_name => model_name }}}
+        scope :alphabetical, :order => 'exports.name'
+        scope :categorical, :order => 'exports.model_name'
+        scope :by_model, lambda { |model_name| { :conditions => { :model_name => model_name }}}
       end
     end
       

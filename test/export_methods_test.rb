@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 
 class ExportMethodsTest < Test::Unit::TestCase
   def test_should_return_header

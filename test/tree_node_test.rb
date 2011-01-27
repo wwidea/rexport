@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 
 class TreeNodeTest < Test::Unit::TestCase
   def test_should_initialize_with_name

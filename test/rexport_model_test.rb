@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 
 class RexportModel < Test::Unit::TestCase
   def test_return_correct_foreign_key
