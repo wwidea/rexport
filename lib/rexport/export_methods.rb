@@ -153,10 +153,9 @@ module Rexport #:nodoc:
       end
       
       def copy
-        self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)).tap do |new_export|
-          export_items.ordered.each { |item| new_export.export_items.create(item.attributes) }
-          export_filters.each { |filter| new_export.export_filters.create(filter.attributes) }
-          roles.each { |role| new_export.roles << role } if self.respond_to?(:roles)
+        self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)) do |new_export|
+          export_items.ordered.each { |item| new_export.export_items.build(item.attributes) }
+          export_filters.each { |filter| new_export.export_filters.build(filter.attributes) }
         end
       end
       
