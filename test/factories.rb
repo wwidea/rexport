@@ -71,12 +71,12 @@ module Factories
   end
   
   Factory.define :grade_filter, :class => 'ExportFilter' do |ef|
-    ef.field  'grade'
-    ef.value  '1'
+    ef.filter_field   'grade'
+    ef.value          '1'
   end
   
   Factory.define :status_filter, :class => 'ExportFilter' do |ef|
-    ef.field  'status.name'
-    ef.value  'active'
+    ef.filter_field   'status.name'
+    ef.value          'active'
   end
 end

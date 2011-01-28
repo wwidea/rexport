@@ -76,7 +76,7 @@ class Test::Unit::TestCase
       
       create_table :export_filters do |t|
         t.integer :export_id
-        t.string :field, :value
+        t.string :filter_field, :value
       end
       
       create_table :self_referential_checks do |t|

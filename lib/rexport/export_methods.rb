@@ -1,14 +1,4 @@
-if RUBY_VERSION > "1.9"    
- require "csv"  
- unless defined? FCSV
-   class Object  
-     FCSV = CSV 
-     alias_method :FCSV, :CSV
-   end  
- end
-else
- require "fastercsv"
-end
+require 'csv' 
 
 module Rexport #:nodoc:
   
@@ -90,7 +80,7 @@ module Rexport #:nodoc:
       # Returns a csv string with the export data
       def to_csv(objects = nil)
         seed_records(objects) unless objects.nil?
-        FCSV.generate do |csv|
+        CSV.generate do |csv|
           csv << header
           records.each do |record|
             csv << record
@@ -146,19 +136,19 @@ module Rexport #:nodoc:
       def export_filter_attributes=(attributes)
         attributes.each do |field, value|
           if value.blank?
-            filter = export_filters.find_by_field(field)
+            filter = export_filters.find_by_filter_field(field)
             filter.destroy if filter
           elsif new_record?
-            export_filters.build(:field => field, :value => value)
+            export_filters.build(:filter_field => field, :value => value)
           else
-            filter = export_filters.find_or_create_by_field(field)
+            filter = export_filters.find_or_create_by_filter_field(field)
             filter.update_attribute(:value, value)
           end
         end
       end
       
       def filter_value(filter_field)
-        filter = export_filters.detect {|f| f.field == filter_field}
+        filter = export_filters.detect {|f| f.fitler_field == filter_field}
         filter ? filter.value : nil
       end
       
@@ -221,7 +211,7 @@ module Rexport #:nodoc:
       def build_conditions
         Hash.new.tap do |conditions|
           export_filters.each do |filter|
-            conditions[get_database_field(filter.field)] = filter.value
+            conditions[get_database_field(filter.filter_field)] = filter.value
           end
         end
       end
@@ -245,7 +235,7 @@ module Rexport #:nodoc:
       end
       
       def filter_fields
-        export_filters.map {|f| f.field}
+        export_filters.map {|f| f.filter_field}
       end
       
       def save_export_items

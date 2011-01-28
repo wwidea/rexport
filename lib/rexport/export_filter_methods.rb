@@ -5,14 +5,14 @@ module Rexport #:nodoc:
         include InstanceMethods
         
         belongs_to :export
-        validates_presence_of :field
+        validates_presence_of :filter_field
       end
     end
     
     module InstanceMethods
       def display_value
-        return value unless field[/_id$/]
-        path = field.split('.')
+        return value unless filter_field[/_id$/]
+        path = filter_field.split('.')
         primary_key_name = path.pop
         association = export.get_klass_from_path(path).reflect_on_all_associations(:belongs_to).detect do |association|
           association.primary_key_name == primary_key_name
