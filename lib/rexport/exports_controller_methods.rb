@@ -15,7 +15,7 @@ module Rexport
       
       respond_to do |format|
         format.html # show.html.erb
-        format.csv { send_data(@export.to_csv, :type => content_type, :filename => filename) }
+        format.csv { send_data(@export.to_csv, :type => export_content_type, :filename => filename) }
       end
     end
     
@@ -75,7 +75,7 @@ module Rexport
     private
     #######
     
-    def content_type
+    def export_content_type
       request.user_agent =~ /windows/i ? 'application/vnd.ms-excel' : 'text/csv'
     end
     
