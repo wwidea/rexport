@@ -114,10 +114,10 @@ module Rexport #:nodoc:
     
       private
     
-      # Adds content columns to rexport_fields, includes callback initialize_local_rexport_fields
+      # Adds content columns and columns ending in "_count" to rexport_fields, includes callback initialize_local_rexport_fields
       # for client defined initialization
       def initialize_rexport_fields
-        content_columns.each do |f|
+        (content_columns + columns.select {|c| c.name =~ /_count$/}).each do |f|
           add_rexport_field(f.name, :type => f.type)
         end
         initialize_local_rexport_fields if respond_to?(:initialize_local_rexport_fields)
