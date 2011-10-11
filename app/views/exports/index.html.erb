@@ -13,6 +13,7 @@
   <tr>
     <th>Name</th>
     <th>Description</th>
+    <th>Created</th>
     <th class='action_icons wider'>&nbsp;</th>
   </tr>
 
@@ -20,6 +21,7 @@
     <tr class="<%= cycle('odd', 'even') %>">
       <td class="row_title"><%= link_to export.full_name, export %></td>
       <td class='description'><%= export.description %></td>
+      <td><%= print_date export.created_at %></td>
       <td class="table_icons">
         <%= link_to_export export_path(export, :format => :csv), :text => false  %>
         <%= link_to_show export, :text => false %>
