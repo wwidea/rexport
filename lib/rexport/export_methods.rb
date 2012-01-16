@@ -172,7 +172,7 @@ module Rexport #:nodoc:
       #########
       
       def get_records(opts = {})
-        get_export_values(export_model.all({:conditions => build_conditions, :include => build_include}.merge(opts)))
+        get_export_values(export_model.find(:all, {:conditions => build_conditions, :include => build_include}.merge(opts)))
       end
       
       def seed_records(objects)
