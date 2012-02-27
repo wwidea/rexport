@@ -19,7 +19,7 @@
 
   <% for export in @exports %>
     <tr class="<%= cycle('odd', 'even') %>">
-      <td class="row_title"><%= link_to export.full_name, export %></td>
+      <td class="row_title"><%= link_to export.name, export %></td>
       <td class='description'><%= export.description %></td>
       <td><%= print_date export.created_at %></td>
       <td class="table_icons">
