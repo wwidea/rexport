@@ -148,7 +148,7 @@ module Rexport #:nodoc:
       end
       
       def filter_value(filter_field)
-        filter = export_filters.detect {|f| f.fitler_field == filter_field}
+        filter = export_filters.detect {|f| f.filter_field == filter_field}
         filter ? filter.value : nil
       end
       
