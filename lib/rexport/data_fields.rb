@@ -25,7 +25,7 @@ module Rexport #:nodoc:
           alias_method_chain :reset_column_information, :rexport_reset
         end
       end
-      base.valid_keys_for_belongs_to_association += [:rexport] unless base.valid_keys_for_belongs_to_association.include?(:rexport)
+      ActiveRecord::Associations::Builder::BelongsTo.valid_options.push(:rexport) unless ActiveRecord::Associations::Builder::BelongsTo.valid_options.include?(:rexport)
     end
     
     module ClassMethods
