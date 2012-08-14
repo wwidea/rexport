@@ -29,9 +29,9 @@
       <th class='action_icons'>&nbsp;</th>
     </tr>
   </thead>
-  <tbody id="export_items" <%= "class='sortable' data-url='#{export_item_sorting_path}'" if @export.modifiable? %>>
+  <%= content_tag :tbody, {:id => 'export_items'}.merge(@export.modifiable? ? {:class => 'sortable', 'data-url' => export_item_sorting_path} : {}) do %>
     <%= render :partial => @export.export_items.ordered %>
-  </tbody>
+  <% end %>
 </table>
 
 <%= content_tag(:p, 'Drag and drop the rows in the table above to re-order the export data left to right in the output (see sample below).', :class => 'instructions') if @export.modifiable? %>
