@@ -12,6 +12,15 @@ Gem::Specification.new do |s|
   s.summary = %q{Ruby on Rails gem to manage exports.}
   s.homepage = %q{https://github.com/wwidea/rexport}
 
+  s.add_dependency('activerecord','~> 3.1.0')
+
+  s.add_development_dependency('rake','>= 0.9.2')
+  s.add_development_dependency('rdoc','>= 3.12')
+  s.add_development_dependency('activesupport','~> 3.1.0')
+  s.add_development_dependency('factory_girl','~> 2.5.0')
+  s.add_development_dependency('sqlite3')
+  s.add_development_dependency('mocha')
+
   s.files = `git ls-files`.split("\n")
 
   s.require_paths = ["lib"]
