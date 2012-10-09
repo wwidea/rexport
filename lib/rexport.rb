@@ -11,7 +11,7 @@ require 'rexport/tree_node'
 module Rexport
 
   class Engine < ::Rails::Engine
-    config.paths.app.views << File.join(File.dirname(__FILE__),'../app/views')
+    config.paths['app/views'] << File.join(File.dirname(__FILE__),'../app/views')
   end
 
 end
