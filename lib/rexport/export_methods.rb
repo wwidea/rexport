@@ -1,47 +1,47 @@
-require 'csv' 
+require 'csv'
 
 module Rexport #:nodoc:
-  
+
   SAMPLE_SIZE = 5
-  
+
   class RexportModel
     attr_accessor :klass, :path
-    
+
     def initialize(klass, path = nil)
       self.klass = klass
       self.path = path.to_s unless path.blank?
     end
-    
+
     def rexport_fields_array
       klass.rexport_fields_array
     end
-    
+
     def field_path(field_name)
       [path, field_name].compact * '.'
     end
-    
+
     def collection_from_association(association)
       return klass.send("find_#{association}_for_rexport") if klass.respond_to?("find_#{association}_for_rexport")
       klass.reflect_on_association(association.to_sym).klass.all
     end
-    
+
     def filter_column(field)
       return field.method unless field.method.include?('.')
       association = field.method.split('.').first
-      klass.reflect_on_association(association.to_sym).primary_key_name
+      klass.reflect_on_association(association.to_sym).foreign_key
     end
-    
+
     def name
       klass.name
     end
   end
-  
+
   module ExportMethods
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
         include InstanceMethods
-        
+
         has_many :export_items, :dependent => :destroy
         has_many :export_filters, :dependent => :destroy
         validates_presence_of :name, :model_name
@@ -51,22 +51,22 @@ module Rexport #:nodoc:
         scope :by_model, lambda { |model_name| { :conditions => { :model_name => model_name }}}
       end
     end
-      
+
     module ClassMethods
       def models
         %w(override_this_method)
       end
-      
+
       def enabled
         find(:all).select {|export| export.enabled? }
       end
     end
-    
+
     module InstanceMethods
       def full_name
         "#{model_name.pluralize} - #{name}"
       end
-      
+
       # Returns a string with the export data
       def to_s
         String.new.tap do |result|
@@ -76,7 +76,7 @@ module Rexport #:nodoc:
           end
         end
       end
-      
+
       # Returns a csv string with the export data
       def to_csv(objects = nil)
         seed_records(objects) unless objects.nil?
@@ -87,42 +87,42 @@ module Rexport #:nodoc:
           end
         end
       end
-      
+
       # Returns an array with the header names from the associated export_items
       def header
         export_items.ordered.map {|i| i.name}
       end
-      
+
       # Returns the export model class
       def export_model
         model_name.constantize
       end
-      
+
       # Returns an array of RexportModels including export_model and associated rexport capable models
       def rexport_models
         @rexport_models ||= get_rexport_models(export_model)
       end
-      
+
       # Returns the records for the export
       def records
         @records ||= get_records
       end
-      
+
       # Returns a limited number of records for the export
       def sample_records
         get_records(:limit => Rexport::SAMPLE_SIZE)
       end
-      
+
       # Returns a class based on a path array
       def get_klass_from_path(path, klass = export_model)
         return klass unless (association_name = path.shift)
         get_klass_from_path(path, klass.reflect_on_association(association_name.to_sym).klass)
       end
-      
+
       def has_rexport_field?(rexport_field)
         rexport_fields.include?(rexport_field)
       end
-      
+
       def rexport_fields=(rexport_fields)
         @rexport_fields = if rexport_fields.respond_to?(:keys)
           @set_position = false
@@ -132,7 +132,7 @@ module Rexport #:nodoc:
           rexport_fields
         end
       end
-      
+
       def export_filter_attributes=(attributes)
         attributes.each do |field, value|
           if value.blank?
@@ -146,43 +146,43 @@ module Rexport #:nodoc:
           end
         end
       end
-      
+
       def filter_value(filter_field)
         filter = export_filters.detect {|f| f.filter_field == filter_field}
         filter ? filter.value : nil
       end
-      
+
       def copy
         self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)) do |new_export|
           export_items.ordered.each { |item| new_export.export_items.build(item.attributes) }
           export_filters.each { |filter| new_export.export_filters.build(filter.attributes) }
         end
       end
-      
+
       def modifiable?
         builtin_key.blank?
       end
-      
+
       def enabled?
         export_model.count > 0
       end
-      
+
       #########
       protected
       #########
-      
+
       def get_records(opts = {})
         get_export_values(export_model.find(:all, {:conditions => build_conditions, :include => build_include}.merge(opts)))
       end
-      
+
       def seed_records(objects)
         @records = get_export_values(objects)
       end
-      
+
       def get_export_values(objects)
         objects.map { |object| object.export(rexport_methods) }
       end
-      
+
       def get_rexport_models(rexport_model, result = [], path = nil)
         return unless rexport_model.respond_to?(:rexport_fields)
         result << RexportModel.new(rexport_model, path)
@@ -194,11 +194,11 @@ module Rexport #:nodoc:
         end
         return result
       end
-      
+
       def get_associations(rexport_model)
         (rexport_model.reflect_on_all_associations(:belongs_to) + rexport_model.reflect_on_all_associations(:has_one))
       end
-      
+
       def build_include
         root = Rexport::TreeNode.new('root')
         (rexport_methods + filter_fields).select {|m| m.include?('.')}.each do |method|
@@ -206,7 +206,7 @@ module Rexport #:nodoc:
         end
         root.to_include
       end
-      
+
       def build_conditions
         Hash.new.tap do |conditions|
           export_filters.each do |filter|
@@ -214,50 +214,50 @@ module Rexport #:nodoc:
           end
         end
       end
-      
+
       def get_database_field(field)
         path = field.split('.')
         field = path.pop
         "#{get_klass_from_path(path).table_name}.#{field}"
       end
-      
+
       def rexport_methods
         @rexport_methods ||= export_model.get_rexport_methods(ordered_rexport_fields)
       end
-      
+
       def rexport_fields
         @rexport_fields ||= export_items.map {|i| i.rexport_field}
       end
-      
+
       def ordered_rexport_fields
         export_items.ordered.map {|i| i.rexport_field}
       end
-      
+
       def filter_fields
         export_filters.map {|f| f.filter_field}
       end
-      
+
       def save_export_items
         export_items.each do |export_item|
           unless rexport_fields.include?(export_item.rexport_field)
             export_item.destroy
           end
         end
-        
+
         export_items.reset
-        
+
         position = 0
         rexport_fields.each do |rexport_field|
           position += 1
           export_item = export_items.detect {|i| i.rexport_field == rexport_field } || export_items.create(:rexport_field => rexport_field)
           export_item.update_attribute(:position, position) if @set_position && export_item.position != position
         end
-        
+
         export_items.reset
         @rexport_fields = nil
         return true
       end
-      
+
       def find_unique_name(original_name, suffix = 0)
         new_name = suffix == 0 ? "#{original_name} Copy" : "#{original_name} Copy [#{suffix}]"
         self.class.find_by_name(new_name) ? find_unique_name(original_name, suffix += 1) : new_name
