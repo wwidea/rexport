@@ -3,19 +3,19 @@ module Rexport #:nodoc:
     def self.included(base)
       base.class_eval do
         include InstanceMethods
-        
+
         belongs_to :export
         validates_presence_of :filter_field
       end
     end
-    
+
     module InstanceMethods
       def display_value
         return value unless filter_field[/_id$/]
         path = filter_field.split('.')
-        primary_key_name = path.pop
+        foreign_key = path.pop
         association = export.get_klass_from_path(path).reflect_on_all_associations(:belongs_to).detect do |association|
-          association.primary_key_name == primary_key_name
+          association.foreign_key == foreign_key
         end
         return 'UNDEFINED ASSOCIATION' unless association
         begin
