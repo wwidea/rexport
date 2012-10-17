@@ -6,7 +6,7 @@ module ExportsHelper
 
     case field.type
       when :boolean
-        select_tag(tag_name, options_for_select([nil, true, false], (value.to_i unless value.nil?)))
+        select_tag(tag_name, options_for_select([nil, ['true', 1], ['false', 0]], (value.to_i unless value.nil?)))
       when :association
         association, text_method = field.method.split('.')
         select_tag( tag_name,
