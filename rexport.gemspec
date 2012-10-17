@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Ruby on Rails gem to manage exports.}
   s.homepage = %q{https://github.com/wwidea/rexport}
 
-  s.add_dependency('rails','~> 3.1.0')
+  s.add_dependency('rails','~> 3.0.0')
 
   s.add_development_dependency('rake','>= 0.9.2')
   s.add_development_dependency('rdoc','>= 3.12')
