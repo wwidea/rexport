@@ -153,14 +153,14 @@ module Rexport #:nodoc:
       end
 
       def copy
-        self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :builtin_key => nil)) do |new_export|
+        self.class.create(self.attributes.merge(:name => find_unique_name(self.name), :built_in_key => nil)) do |new_export|
           export_items.ordered.each { |item| new_export.export_items.build(item.attributes) }
           export_filters.each { |filter| new_export.export_filters.build(filter.attributes) }
         end
       end
 
       def modifiable?
-        builtin_key.blank?
+        built_in_key.blank?
       end
 
       def enabled?

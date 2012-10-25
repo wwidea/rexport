@@ -91,8 +91,8 @@ class ExportMethodsTest < ActiveSupport::TestCase
     assert_equal Factory(:export).export_items.count, Factory(:export).copy.export_items.count
   end
 
-  def test_should_remove_builtin_key_on_copy
-    assert_nil Factory(:export).copy.builtin_key
+  def test_should_remove_built_in_key_on_copy
+    assert_nil Factory(:export).copy.built_in_key
   end
 
   def test_should_copy_export_with_export_filters
