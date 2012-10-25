@@ -21,7 +21,6 @@ class CreateExportTables < ActiveRecord::Migration
       t.string   "name"
       t.string   "model_name"
       t.text     "description"
-      t.string   "built_in_key"
       t.datetime "created_at"
       t.datetime "updated_at"
     end

@@ -66,7 +66,6 @@ class ActiveSupport::TestCase
       create_table :exports do |t|
         t.string :name
         t.string :model_name
-        t.string :built_in_key
       end
 
       create_table :export_items do |t|
