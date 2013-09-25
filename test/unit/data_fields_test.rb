@@ -79,7 +79,7 @@ class DataFieldsTest < ActiveSupport::TestCase
   
   class RexportInstanceMethodsTest < DataFieldsTest
     def test_should_export_fields_for_record
-      enrollment = Factory(:enrollment)
+      enrollment = FactoryGirl.create(:enrollment)
       assert_equal(%w(1), enrollment.export('grade'))
       assert_equal(%w(bar), enrollment.export('foo'))
       assert_equal([''], enrollment.export('bad_method'))
@@ -93,24 +93,24 @@ class DataFieldsTest < ActiveSupport::TestCase
     end
   
     def test_should_handle_undefined_export
-      enrollment = Factory(:enrollment)
+      enrollment = FactoryGirl.create(:enrollment)
       assert_equal(['UNDEFINED EXPORT FIELD'], enrollment.export('undefined_rexport_field'))
     end
   
     def test_should_export_associated_fields
-      enrollment = Factory(:enrollment)
+      enrollment = FactoryGirl.create(:enrollment)
       assert_equal(['Sammy Sample'], enrollment.export('student.name'))
       assert_equal(['The Sample Family'], enrollment.export('student.family.name'))
       assert_equal(%w(bar), enrollment.export('student.family.foo'))
     end
   
     def test_should_export_field_from_non_rexported_model
-      enrollment = Factory(:enrollment)
+      enrollment = FactoryGirl.create(:enrollment)
       assert_equal(['active'], enrollment.export('status.name'))
     end
   
     def test_should_export_local_associated_and_non_rexported_fields
-      enrollment = Factory(:enrollment)
+      enrollment = FactoryGirl.create(:enrollment)
       assert_equal(['The Sample Family', 'Sammy Sample', '1', 'bar', 'active'], enrollment.export('student.family.name', 'student.name', 'grade', 'student.family.foo', 'status.name'))
     end
   end
