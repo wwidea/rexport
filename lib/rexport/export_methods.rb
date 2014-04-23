@@ -46,9 +46,9 @@ module Rexport #:nodoc:
         has_many :export_filters, :dependent => :destroy
         validates_presence_of :name, :model_name
         after_save :save_export_items
-        scope :alphabetical, :order => 'exports.name'
-        scope :categorical, :order => 'exports.model_name'
-        scope :by_model, lambda { |model_name| { :conditions => { :model_name => model_name }}}
+        scope :alphabetical,  ->              { order :name }
+        scope :categorical,   ->              { order :model_name }
+        scope :by_model,      ->(model_name)  { where(model_name: model_name) }
       end
     end
 
@@ -110,7 +110,7 @@ module Rexport #:nodoc:
 
       # Returns a limited number of records for the export
       def sample_records
-        get_records(:limit => Rexport::SAMPLE_SIZE)
+        get_records(Rexport::SAMPLE_SIZE)
       end
 
       # Returns a class based on a path array
@@ -153,9 +153,9 @@ module Rexport #:nodoc:
       end
 
       def copy
-        self.class.create(self.attributes.merge(:name => find_unique_name(self.name))) do |new_export|
-          export_items.ordered.each { |item| new_export.export_items.build(item.attributes) }
-          export_filters.each { |filter| new_export.export_filters.build(filter.attributes) }
+        self.class.create(attributes_for_copy) do |new_export|
+          export_items.ordered.each { |item| new_export.export_items.build(item.attributes_for_copy) }
+          export_filters.each { |filter| new_export.export_filters.build(filter.attributes_for_copy) }
         end
       end
 
@@ -172,8 +172,8 @@ module Rexport #:nodoc:
       protected
       #########
 
-      def get_records(opts = {})
-        get_export_values(export_model.find(:all, {:conditions => build_conditions, :include => build_include}.merge(opts)))
+      def get_records(limit = nil)
+        get_export_values(export_model.where(build_conditions).includes(build_include).limit(limit))
       end
 
       def seed_records(objects)
@@ -257,6 +257,10 @@ module Rexport #:nodoc:
         export_items.reset
         @rexport_fields = nil
         return true
+      end
+      
+      def attributes_for_copy
+        attributes.slice('model_name', 'description').merge(name: find_unique_name(self.name))
       end
 
       def find_unique_name(original_name, suffix = 0)

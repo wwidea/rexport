@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'rubygems'
 require 'active_record'
 require 'active_support/test_case'
@@ -66,6 +66,7 @@ class ActiveSupport::TestCase
       create_table :exports do |t|
         t.string :name
         t.string :model_name
+        t.text :description
       end
 
       create_table :export_items do |t|

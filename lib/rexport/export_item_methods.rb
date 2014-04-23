@@ -9,7 +9,7 @@ module Rexport #:nodoc:
         belongs_to :export
         before_validation :replace_blank_name_with_rexport_field
         validates_presence_of :name, :rexport_field
-        scope :ordered, :order => 'position'
+        scope :ordered, -> { order :position }
       end
     end
     
@@ -24,6 +24,10 @@ module Rexport #:nodoc:
     end
     
     module InstanceMethods
+      def attributes_for_copy
+        attributes.slice('position', 'name', 'rexport_field')
+      end
+      
       #######
       private
       #######

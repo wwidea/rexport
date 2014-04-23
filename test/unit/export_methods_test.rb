@@ -34,7 +34,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   def test_sample_records
     export = FactoryGirl.create(:export)
-    export.expects(:get_records).with(:limit => Rexport::SAMPLE_SIZE).returns(true)
+    export.expects(:get_records).with(Rexport::SAMPLE_SIZE).returns(true)
     assert(export.sample_records)
   end
 

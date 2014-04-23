@@ -25,6 +25,10 @@ module Rexport #:nodoc:
           return 'ASSOCIATED OBJECT NOT FOUND'
         end
       end
+      
+      def attributes_for_copy
+        attributes.slice('filter_field', 'value')
+      end
     end
   end
 end
