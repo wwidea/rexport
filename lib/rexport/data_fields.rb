@@ -25,13 +25,6 @@ module Rexport #:nodoc:
           alias_method_chain :reset_column_information, :rexport_reset
         end
       end
-      begin
-        #>= rails 3.1
-        ActiveRecord::Associations::Builder::BelongsTo.valid_options.push(:rexport) unless ActiveRecord::Associations::Builder::BelongsTo.valid_options.include?(:rexport)
-      rescue NameError
-        #< rails 3.1
-        base.valid_keys_for_belongs_to_association += [:rexport] unless base.valid_keys_for_belongs_to_association.include?(:rexport)
-      end
     end
 
     module ClassMethods
