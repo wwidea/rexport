@@ -6,11 +6,12 @@ require "rexport/version"
 Gem::Specification.new do |s|
   s.name = 'rexport'
   s.version = Rexport::VERSION
-  s.authors = ['Aaron Baldwin', 'Jonathan Garvin', 'WWIDEA, Inc']
+  s.authors = ['Aaron Baldwin', 'WWIDEA, Inc']
   s.email = ["developers@wwidea.org"]
   s.homepage = 'https://github.com/wwidea/rexport'
   s.summary = 'Ruby on Rails gem to manage exports.'
-  s.description = 'Ruby on Rails gem to manage exports.'
+  s.description = 'Rexport integrates into a Rails application making model data available for export into CSV files.'
+  s.license     = 'MIT'
   
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
