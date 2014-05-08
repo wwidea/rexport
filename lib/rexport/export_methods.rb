@@ -141,7 +141,7 @@ module Rexport #:nodoc:
           elsif new_record?
             export_filters.build(:filter_field => field, :value => value)
           else
-            filter = export_filters.find_or_create_by_filter_field(field)
+            filter = export_filters.find_by_filter_field(field) || export_filters.create(filter_field: field)
             filter.update_attribute(:value, value)
           end
         end
