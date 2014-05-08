@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rexport (0.4.2)
-      rails (>= 4.0.1)
+      rails (~> 4.0, >= 4.0.1)
 
 GEM
   remote: http://rubygems.org/
@@ -93,8 +93,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  factory_girl (~> 4.2.0)
-  mocha
-  rake (>= 0.9.2)
+  factory_girl (~> 4.2)
+  mocha (~> 1.0)
+  rake (~> 10.0)
   rexport!
-  sqlite3
+  sqlite3 (~> 1.3)
