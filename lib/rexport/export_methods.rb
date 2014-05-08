@@ -136,12 +136,12 @@ module Rexport #:nodoc:
       def export_filter_attributes=(attributes)
         attributes.each do |field, value|
           if value.blank?
-            filter = export_filters.find_by_filter_field(field)
+            filter = export_filters.find_by(filter_field: field)
             filter.destroy if filter
           elsif new_record?
             export_filters.build(:filter_field => field, :value => value)
           else
-            filter = export_filters.find_by_filter_field(field) || export_filters.create(filter_field: field)
+            filter = export_filters.find_or_create_by(filter_field: field)
             filter.update_attribute(:value, value)
           end
         end
@@ -265,7 +265,7 @@ module Rexport #:nodoc:
 
       def find_unique_name(original_name, suffix = 0)
         new_name = suffix == 0 ? "#{original_name} Copy" : "#{original_name} Copy [#{suffix}]"
-        self.class.find_by_name(new_name) ? find_unique_name(original_name, suffix += 1) : new_name
+        self.class.find_by(name: new_name) ? find_unique_name(original_name, suffix += 1) : new_name
       end
     end
   end
