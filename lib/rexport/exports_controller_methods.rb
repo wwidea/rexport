@@ -1,15 +1,9 @@
 module Rexport
   module ExportsControllerMethods
-    # GET /exports
     def index
       @exports = Export.categorical.alphabetical
-      
-      respond_to do |format|
-        format.html # index.html.erb
-      end
     end
     
-    # GET /exports/1
     def show
       @export = Export.find(params[:id])
       
@@ -19,61 +13,58 @@ module Rexport
       end
     end
     
-    # GET /exports/new
     def new
-      @export = Export.new(params[:export])
-      
-      respond_to do |format|
-        format.html # new.html.erb
-      end
+      @export = Export.new(export_params)
     end
     
-    # GET /exports/1/edit
     def edit
       @export = Export.find(params[:id])
     end
     
-    # POST /exports
     def create
-      @export = params[:original_export_id] ? Export.find(params[:original_export_id]).copy : Export.new(params[:export])
+      @export = params[:original_export_id] ? Export.find(params[:original_export_id]).copy : Export.new(export_params)
       
-      respond_to do |format|
-        if @export.save
-          flash[:notice] = 'Export was successfully created.'
-          format.html { redirect_to(@export) }
-        else
-          format.html { render :action => "new" }
-        end
+      if @export.save
+        redirect_to @export, notice: 'Export was successfully created.'
+      else
+        render :new
       end
     end
     
-    # PUT /exports/1
     def update
       @export = Export.find(params[:id])
       
-      respond_to do |format|
-        if @export.update_attributes(params[:export])
-          flash[:notice] = 'Export was successfully updated.'
-          format.html { redirect_to(@export) }
-        else
-          format.html { render :action => "edit" }
-        end
+      if @export.update_attributes(export_params)
+        redirect_to @export, notice: 'Export was successfully updated.'
+      else
+        render :edit
       end
     end
     
-    # DELETE /exports/1
     def destroy
       @export = Export.find(params[:id])
       @export.destroy
       
-      respond_to do |format|
-        format.html { redirect_to(exports_url) }
-      end
+      redirect_to exports_url
     end
     
-    #######
     private
-    #######
+    
+    def export_params
+      params.require(:export).permit(:name, :model_name, :description).merge(rexport_fields: rexport_fields, export_filter_attributes: export_filter_attributes)
+    end
+    
+    def rexport_fields
+      permit_all params[:export][:rexport_fields]
+    end
+    
+    def export_filter_attributes
+      permit_all params[:export][:export_filter_attributes]
+    end
+    
+    def permit_all(params)
+      params ? params.permit! : []
+    end
     
     def export_content_type
       request.user_agent =~ /windows/i ? 'application/vnd.ms-excel' : 'text/csv'
