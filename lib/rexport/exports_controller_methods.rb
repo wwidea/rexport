@@ -51,7 +51,7 @@ module Rexport
     private
     
     def export_params
-      params.require(:export).permit(:name, :model_name, :description).merge(rexport_fields: rexport_fields, export_filter_attributes: export_filter_attributes)
+      params.require(:export).permit(:name, :model_class_name, :description).merge(rexport_fields: rexport_fields, export_filter_attributes: export_filter_attributes)
     end
     
     def rexport_fields
@@ -71,7 +71,7 @@ module Rexport
     end
     
     def filename
-      "#{@export.model_name}_#{@export.name.gsub(/ /, '_')}_#{Time.now.strftime('%Y%m%d')}.csv"
+      "#{@export.model_class_name}_#{@export.name.gsub(/ /, '_')}_#{Time.now.strftime('%Y%m%d')}.csv"
     end
   end
 end

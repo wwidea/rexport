@@ -65,7 +65,7 @@ class ActiveSupport::TestCase
 
       create_table :exports do |t|
         t.string :name
-        t.string :model_name
+        t.string :model_class_name
         t.text :description
       end
 

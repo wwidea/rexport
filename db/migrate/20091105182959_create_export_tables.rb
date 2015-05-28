@@ -19,7 +19,7 @@ class CreateExportTables < ActiveRecord::Migration
 
     create_table "exports", :force => true do |t|
       t.string   "name"
-      t.string   "model_name"
+      t.string   "model_class_name"
       t.text     "description"
       t.datetime "created_at"
       t.datetime "updated_at"
