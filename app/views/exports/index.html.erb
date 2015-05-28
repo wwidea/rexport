@@ -2,7 +2,7 @@
   <fieldset>
     <legend>Create New Export</legend>
     <div class='dropdown'>
-      <%= f.select :model_name, Export.models %>
+      <%= f.select :model_class_name, Export.models %>
       <%= f.submit 'Create' %>
     </div>
   </fieldset>

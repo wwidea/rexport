@@ -30,7 +30,7 @@ module Rexport
       
       factory :export do
         name 'Enrollment Export'
-        model_name 'Enrollment'
+        model_class_name 'Enrollment'
         export_items do |items|
           %w(family_name_export_item grade_export_item status_name_export_item bogus_export_item).map do |item|
             items.association(item)
@@ -40,7 +40,7 @@ module Rexport
       
       factory :filtered_export, :class => 'Export' do
         name 'Filtered Enrollment Export'
-        model_name 'Enrollment'
+        model_class_name 'Enrollment'
         export_filters do |filters|
           %w(grade_filter status_filter).map do |filter|
             filters.association(filter)

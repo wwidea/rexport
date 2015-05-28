@@ -16,7 +16,7 @@
     <h3>Export Items</h3>
     <%= render :partial => 'rexport_model', :collection => @export.rexport_models %>
   
-    <%= f.hidden_field :model_name %>
+    <%= f.hidden_field :model_class_name %>
   
     <div>
       <%= f.submit 'Save Export' %>

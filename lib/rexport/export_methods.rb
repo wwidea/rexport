@@ -44,11 +44,11 @@ module Rexport #:nodoc:
 
         has_many :export_items, :dependent => :destroy
         has_many :export_filters, :dependent => :destroy
-        validates_presence_of :name, :model_name
+        validates_presence_of :name, :model_class_name
         after_save :save_export_items
         scope :alphabetical,  ->              { order :name }
-        scope :categorical,   ->              { order :model_name }
-        scope :by_model,      ->(model_name)  { where(model_name: model_name) }
+        scope :categorical,   ->              { order :model_class_name }
+        scope :by_model,      ->(model_class_name)  { where(model_class_name: model_class_name) }
       end
     end
 
@@ -64,7 +64,7 @@ module Rexport #:nodoc:
 
     module InstanceMethods
       def full_name
-        "#{model_name.pluralize} - #{name}"
+        "#{model_class_name.pluralize} - #{name}"
       end
 
       # Returns a string with the export data
@@ -95,7 +95,7 @@ module Rexport #:nodoc:
 
       # Returns the export model class
       def export_model
-        model_name.constantize
+        model_class_name.constantize
       end
 
       # Returns an array of RexportModels including export_model and associated rexport capable models
@@ -260,7 +260,7 @@ module Rexport #:nodoc:
       end
       
       def attributes_for_copy
-        attributes.slice('model_name', 'description').merge(name: find_unique_name(self.name))
+        attributes.slice('model_class_name', 'description').merge(name: find_unique_name(self.name))
       end
 
       def find_unique_name(original_name, suffix = 0)
