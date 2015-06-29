@@ -197,7 +197,7 @@ module Rexport #:nodoc:
       end
 
       def get_associations(rexport_model)
-        (rexport_model.reflect_on_all_associations(:belongs_to) + rexport_model.reflect_on_all_associations(:has_one))
+        (rexport_model.reflect_on_all_associations(:belongs_to) + rexport_model.reflect_on_all_associations(:has_one)).reject(&:polymorphic?)
       end
 
       def build_include
