@@ -21,9 +21,7 @@ module Rexport #:nodoc:
       base.extend( ClassMethods )
       base.class_eval do
         include InstanceMethods
-        class << self
-          alias_method_chain :reset_column_information, :rexport_reset
-        end
+        prepend ClassMethods
       end
     end
 
@@ -106,8 +104,8 @@ module Rexport #:nodoc:
         end
       end
 
-      def reset_column_information_with_rexport_reset
-        reset_column_information_without_rexport_reset
+      def reset_column_information
+        super
         @rexport_fields = nil
       end
 
