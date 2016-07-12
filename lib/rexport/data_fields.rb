@@ -105,8 +105,8 @@ module Rexport #:nodoc:
       end
 
       def reset_column_information
-        super
         @rexport_fields = nil
+        super
       end
 
       private
