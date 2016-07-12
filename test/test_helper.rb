@@ -4,6 +4,7 @@ require 'active_record'
 require 'active_support/test_case'
 require 'logger'
 require 'factory_girl'
+require 'mocha/mini_test'
 require File.dirname(__FILE__) + '/factories'
 require File.dirname(__FILE__) + '/../lib/rexport/data_fields'
 require File.dirname(__FILE__) + '/../lib/rexport/export_methods'
@@ -18,6 +19,7 @@ RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
 ActiveRecord::Base.logger = RAILS_DEFAULT_LOGGER
 
 class ActiveSupport::TestCase
+  include FactoryGirl::Syntax::Methods
   include Rexport::Factories
 
   def setup
@@ -88,7 +90,7 @@ class ActiveSupport::TestCase
   end
 
   def teardown_db
-    ActiveRecord::Base.connection.tables.each do |table|
+    ActiveRecord::Base.connection.data_sources.each do |table|
       ActiveRecord::Base.connection.drop_table(table)
     end
   end
