@@ -5,7 +5,7 @@ module Rexport
     
       respond_to do |format|
         format.js do
-          render :nothing => true
+          head :ok
         end
       end
     end
