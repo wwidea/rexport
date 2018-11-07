@@ -12,11 +12,7 @@ module Rexport #:nodoc:
     module InstanceMethods
       def display_value
         return value unless filter_field[/_id$/]
-        path = filter_field.split('.')
-        foreign_key = path.pop
-        association = export.get_klass_from_path(path).reflect_on_all_associations(:belongs_to).detect do |association|
-          association.foreign_key == foreign_key
-        end
+        association = find_association
         return 'UNDEFINED ASSOCIATION' unless association
         begin
           object = association.klass.find(value)
@@ -25,9 +21,19 @@ module Rexport #:nodoc:
           return 'ASSOCIATED OBJECT NOT FOUND'
         end
       end
-      
+
       def attributes_for_copy
         attributes.slice('filter_field', 'value')
+      end
+
+      private
+
+      def find_association
+        path = filter_field.split('.')
+        foreign_key = path.pop
+        export.get_klass_from_path(path).reflect_on_all_associations(:belongs_to).detect do |association|
+          association.foreign_key == foreign_key
+        end
       end
     end
   end
