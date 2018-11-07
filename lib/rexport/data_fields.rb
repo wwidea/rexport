@@ -28,6 +28,7 @@ module Rexport #:nodoc:
     module ClassMethods
       # Returns hash of exportable data items
       def rexport_fields
+        @rexport_fields ||= nil
         unless @rexport_fields
           @rexport_fields = HashWithIndifferentAccess.new
           initialize_rexport_fields
