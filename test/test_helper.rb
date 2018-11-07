@@ -1,16 +1,12 @@
-require 'minitest/autorun'
-require 'rubygems'
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "rails"
 require 'active_record'
-require 'active_support/test_case'
-require 'logger'
+require "rexport"
+
+require 'minitest/autorun'
 require 'factory_girl'
 require 'mocha/mini_test'
 require File.dirname(__FILE__) + '/factories'
-require File.dirname(__FILE__) + '/../lib/rexport/data_fields'
-require File.dirname(__FILE__) + '/../lib/rexport/export_methods'
-require File.dirname(__FILE__) + '/../lib/rexport/export_item_methods'
-require File.dirname(__FILE__) + '/../lib/rexport/export_filter_methods'
-require File.dirname(__FILE__) + '/../lib/rexport/tree_node'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
