@@ -18,14 +18,14 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   def test_records
     export = FactoryGirl.create(:export)
-    enrollment = FactoryGirl.create(:enrollment)
+    FactoryGirl.create(:enrollment)
     assert_equal(['The Sample Family', '1', 'active', 'UNDEFINED EXPORT FIELD'], export.records.first)
   end
 
   def test_records_with_filters
     export = FactoryGirl.create(:export)
     filtered_export = FactoryGirl.create(:export)
-    enrollment = FactoryGirl.create(:enrollment)
+    FactoryGirl.create(:enrollment)
     FactoryGirl.create(:second_grade_enrollment)
     assert_equal(2, Enrollment.count)
     assert_equal(2, export.records.length)
@@ -45,7 +45,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   def test_to_s_with_record
     export = FactoryGirl.create(:export)
-    enrollment = FactoryGirl.create(:enrollment)
+    FactoryGirl.create(:enrollment)
     assert_equal("Family Name|Grade|Status|Bogus Item\nThe Sample Family|1|active|UNDEFINED EXPORT FIELD\n", export.to_s)
   end
 
@@ -56,7 +56,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   def test_to_csv_with_record
     export = FactoryGirl.create(:export)
-    enrollment = FactoryGirl.create(:enrollment)
+    FactoryGirl.create(:enrollment)
     assert_equal("Family Name,Grade,Status,Bogus Item\nThe Sample Family,1,active,UNDEFINED EXPORT FIELD\n", export.to_csv)
   end
 
