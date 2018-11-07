@@ -5,7 +5,7 @@ require "rexport"
 
 require 'minitest/autorun'
 require 'factory_girl'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require File.dirname(__FILE__) + '/factories'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
