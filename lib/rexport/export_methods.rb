@@ -251,14 +251,14 @@ module Rexport #:nodoc:
         rexport_fields.each do |rexport_field|
           position += 1
           export_item = export_items.detect {|i| i.rexport_field == rexport_field } || export_items.create(:rexport_field => rexport_field)
-          export_item.update_attribute(:position, position) if @set_position && export_item.position != position
+          export_item.update_attribute(:position, position) if set_position && export_item.position != position
         end
 
         export_items.reset
         @rexport_fields = nil
         return true
       end
-      
+
       def attributes_for_copy
         attributes.slice('model_class_name', 'description').merge(name: find_unique_name(self.name))
       end
@@ -266,6 +266,10 @@ module Rexport #:nodoc:
       def find_unique_name(original_name, suffix = 0)
         new_name = suffix == 0 ? "#{original_name} Copy" : "#{original_name} Copy [#{suffix}]"
         self.class.find_by(name: new_name) ? find_unique_name(original_name, suffix += 1) : new_name
+      end
+
+      def set_position
+        @set_position ||= false
       end
     end
   end
