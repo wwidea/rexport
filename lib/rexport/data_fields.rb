@@ -1,12 +1,6 @@
 module Rexport #:nodoc:
   module DataFields
-    def self.included( base )
-      base.extend( ClassMethods )
-      base.class_eval do
-        include InstanceMethods
-        prepend ClassMethods
-      end
-    end
+    extend ActiveSupport::Concern
 
     module ClassMethods
       # Returns hash of exportable data items
@@ -109,26 +103,24 @@ module Rexport #:nodoc:
       end
     end
 
-    module InstanceMethods
-      # Return an array of formatted export for the passed methods
-      def export(*methods)
-        methods.flatten.map do |method|
-          case value = (eval("self.#{method}", binding) rescue nil)
-            when Date, Time
-              value.strftime("%m/%d/%y")
-            when TrueClass
-              'Y'
-            when FalseClass
-              'N'
-            else value.to_s
-          end
+    # Return an array of formatted export for the passed methods
+    def export(*methods)
+      methods.flatten.map do |method|
+        case value = (eval("self.#{method}", binding) rescue nil)
+          when Date, Time
+            value.strftime("%m/%d/%y")
+          when TrueClass
+            'Y'
+          when FalseClass
+            'N'
+          else value.to_s
         end
       end
+    end
 
-      # Returns string indicating this field is undefined
-      def undefined_rexport_field
-        'UNDEFINED EXPORT FIELD'
-      end
+    # Returns string indicating this field is undefined
+    def undefined_rexport_field
+      'UNDEFINED EXPORT FIELD'
     end
   end
 end
