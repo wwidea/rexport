@@ -56,7 +56,6 @@ module Rexport
 
       factory :grade_export_item, class: 'ExportItem' do
         position       { 2 }
-        name           { 'Grade' }
         rexport_field  { 'grade' }
       end
 
