@@ -1,9 +1,16 @@
 require 'test_helper'
 
 class ExportMethodsTest < ActiveSupport::TestCase
+  test 'should return models' do
+    assert Export.models
+  end
+
+  test 'should return full name' do
+    assert_equal 'Enrollments - Enrollment Export', FactoryBot.create(:export).full_name
+  end
+
   test 'should return header' do
-    export = FactoryBot.create(:export)
-    assert_equal ['Family Name', 'Grade', 'Status', 'Bogus Item'], export.header
+    assert_equal ['Family Name', 'Grade', 'Status', 'Bogus Item'], FactoryBot.create(:export).header
   end
 
   test 'should return rexport_fields' do
