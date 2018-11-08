@@ -29,10 +29,6 @@ class ActiveSupport::TestCase
     teardown_db
   end
 
-  # Placeholder so test/unit ignores test cases without any tests.
-  def default_test
-  end
-
   private
 
   def setup_db
