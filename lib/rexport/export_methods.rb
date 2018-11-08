@@ -15,7 +15,7 @@ module Rexport #:nodoc:
       scope :alphabetical,  -> { order :name }
       scope :categorical,   -> { order :model_class_name }
 
-      scope :by_model,      ->(model_class_name)  do
+      scope :by_model, ->(model_class_name) do
         where(model_class_name: model_class_name)
       end
     end
