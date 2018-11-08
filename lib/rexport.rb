@@ -1,3 +1,4 @@
+require 'rexport/data_field'
 require 'rexport/data_fields'
 require 'rexport/export_filter_methods'
 require 'rexport/export_filters_controller_methods'

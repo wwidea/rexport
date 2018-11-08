@@ -1,21 +1,4 @@
 module Rexport #:nodoc:
-
-  # Stores the name and method of the export data item
-  class DataField
-    include Comparable
-    attr_accessor :name, :method, :type
-
-    def initialize(name, options = {})
-      self.name = name.to_s
-      self.method = options[:method].blank? ? self.name : options[:method].to_s
-      self.type = options[:type]
-    end
-
-    def <=>(rf)
-      self.name <=> rf.name
-    end
-  end
-
   module DataFields
     def self.included( base )
       base.extend( ClassMethods )
