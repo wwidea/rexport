@@ -30,12 +30,11 @@ module Rexport #:nodoc:
     private
 
     def replace_blank_name_with_rexport_field
-      return unless name.blank?
-      self.name = if rexport_field.include?('.')
-        rexport_field.split('.').values_at(-2..-1).map {|v| v.titleize}.join(' - ')
-      else
-        rexport_field.titleize
-      end
+      self.name = generate_name_from_rexport_field if name.blank?
+    end
+
+    def generate_name_from_rexport_field
+      rexport_field.split('.').last(2).map(&:titleize).join(' - ')
     end
   end
 end
