@@ -36,8 +36,8 @@ class TreeNodeTest < ActiveSupport::TestCase
 
   def test_should_return_nested_hash_include
     root = Rexport::TreeNode.new('root', %w(a b c))
-    assert_equal([{:a => [{:b => [:c]}]}], root.to_include)
+    assert_equal([{a: [{b: [:c]}]}], root.to_include)
     root.add_child('b', 'one', 'two')
-    assert_equal([{:a => [{:b => [:c]}]}, {:b => [{:one =>[:two]}]}], root.to_include)
+    assert_equal([{a: [{b: [:c]}]}, {b: [{one:[:two]}]}], root.to_include)
   end
 end

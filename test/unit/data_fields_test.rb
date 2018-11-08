@@ -19,7 +19,7 @@ class DataFieldsTest < ActiveSupport::TestCase
 
     def test_should_add_single_association_method_to_rexport_fields
       assert_difference('Enrollment.rexport_fields.length') do
-        Enrollment.add_association_methods(:associations => 'test_association')
+        Enrollment.add_association_methods(associations: 'test_association')
       end
       assert_equal('test_association_name', Enrollment.rexport_fields[:test_association_name].name)
       assert_equal('test_association.name', Enrollment.rexport_fields[:test_association_name].method)
@@ -27,13 +27,13 @@ class DataFieldsTest < ActiveSupport::TestCase
 
     def test_should_add_name_methods_for_multiple_associations
       assert_difference('Enrollment.rexport_fields.length', 3) do
-        Enrollment.add_association_methods(:associations => %w(a b c))
+        Enrollment.add_association_methods(associations: %w(a b c))
       end
     end
 
     def test_should_add_multiple_methods_for_multiple_associations
       assert_difference('Enrollment.rexport_fields.length', 9) do
-        Enrollment.add_association_methods(:associations => %w(a1 a2 a3), :methods => %w(m1 m2 m3))
+        Enrollment.add_association_methods(associations: %w(a1 a2 a3), methods: %w(m1 m2 m3))
       end
     end
 

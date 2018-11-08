@@ -4,15 +4,15 @@ module Rexport #:nodoc:
       base.extend ClassMethods
       base.class_eval do
         include InstanceMethods
-        
-        acts_as_list :scope => :export
+
+        acts_as_list scope: :export
         belongs_to :export
         before_validation :replace_blank_name_with_rexport_field
         validates_presence_of :name, :rexport_field
         scope :ordered, -> { order :position }
       end
     end
-    
+
     module ClassMethods
       def resort(export_item_ids)
         export_item_ids.each_index do |index|
@@ -22,16 +22,16 @@ module Rexport #:nodoc:
         end
       end
     end
-    
+
     module InstanceMethods
       def attributes_for_copy
         attributes.slice('position', 'name', 'rexport_field')
       end
-      
+
       #######
       private
       #######
-      
+
       def replace_blank_name_with_rexport_field
         return unless name.blank?
         self.name = if rexport_field.include?('.')

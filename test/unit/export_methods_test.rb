@@ -62,7 +62,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   def test_to_csv_with_passed_objects
     export = FactoryBot.create(:export)
-    assert_equal("Family Name,Grade,Status,Bogus Item\n\"\",99,\"\",UNDEFINED EXPORT FIELD\n", export.to_csv([Enrollment.new(:grade => 99)]))
+    assert_equal("Family Name,Grade,Status,Bogus Item\n\"\",99,\"\",UNDEFINED EXPORT FIELD\n", export.to_csv([Enrollment.new(grade: 99)]))
   end
 
   def test_build_conditions

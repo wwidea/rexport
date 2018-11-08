@@ -49,7 +49,7 @@ module Rexport #:nodoc:
       # Adds associated methods to rexport_fields
       #   :associations - an association or arrary of associations
       #   :methods - a method or array of methods
-      #   :filter - if true will send :type => :association to add_report_field
+      #   :filter - if true will send type: :association to add_report_field
       def add_association_methods(options = {})
         options.stringify_keys!
         options.assert_valid_keys(%w(associations methods filter))
@@ -64,7 +64,7 @@ module Rexport #:nodoc:
 
         associations.each do |association|
           methods.each do |method|
-            add_rexport_field("#{association}_#{method}", :method => "#{association}.#{method}", :type => type)
+            add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
           end
         end
       end
@@ -116,7 +116,7 @@ module Rexport #:nodoc:
       # for client defined initialization
       def initialize_rexport_fields
         (content_columns + columns.select {|c| c.name =~ /_count$/}).each do |f|
-          add_rexport_field(f.name, :type => f.type)
+          add_rexport_field(f.name, type: f.type)
         end
         initialize_local_rexport_fields if respond_to?(:initialize_local_rexport_fields)
       end

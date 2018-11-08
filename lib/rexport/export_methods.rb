@@ -42,8 +42,8 @@ module Rexport #:nodoc:
       base.class_eval do
         include InstanceMethods
 
-        has_many :export_items, :dependent => :destroy
-        has_many :export_filters, :dependent => :destroy
+        has_many :export_items, dependent: :destroy
+        has_many :export_filters, dependent: :destroy
         validates_presence_of :name, :model_class_name
         after_save :save_export_items
         scope :alphabetical,  ->              { order :name }
@@ -139,7 +139,7 @@ module Rexport #:nodoc:
             filter = export_filters.find_by(filter_field: field)
             filter.destroy if filter
           elsif new_record?
-            export_filters.build(:filter_field => field, :value => value)
+            export_filters.build(:filter_field => field, value: value)
           else
             filter = export_filters.find_or_create_by(filter_field: field)
             filter.update_attribute(:value, value)

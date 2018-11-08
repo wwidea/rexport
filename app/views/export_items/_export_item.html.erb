@@ -3,6 +3,6 @@
   <td><%= export_item.rexport_field %></td>
   <td class="table_icons">
     <%= link_to(image_tag('icon_edit.gif'), edit_export_item_path(export_item)) if @export.modifiable? %>
-    <%= link_to_delete(export_item, :text => false) if @export.modifiable? %>
+    <%= link_to_delete(export_item, text: false) if @export.modifiable? %>
   </td>
 </tr>
