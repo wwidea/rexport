@@ -23,7 +23,7 @@ module Rexport
         grade   { 1 }
       end
 
-      factory :second_grade_enrollment, :class => 'Enrollment' do
+      factory :second_grade_enrollment, class: 'Enrollment' do
         status { |status| status.association(:status) }
         grade { 2 }
       end
@@ -38,7 +38,7 @@ module Rexport
         end
       end
 
-      factory :filtered_export, :class => 'Export' do
+      factory :filtered_export, class: 'Export' do
         name              { 'Filtered Enrollment Export' }
         model_class_name  { 'Enrollment' }
         export_filters do |filters|
@@ -48,36 +48,36 @@ module Rexport
         end
       end
 
-      factory :family_name_export_item, :class => 'ExportItem' do
+      factory :family_name_export_item, class: 'ExportItem' do
         position       { 1 }
         name           { 'Family Name' }
         rexport_field  { 'student.family.name' }
       end
 
-      factory :grade_export_item, :class => 'ExportItem' do
+      factory :grade_export_item, class: 'ExportItem' do
         position       { 2 }
         name           { 'Grade' }
         rexport_field  { 'grade' }
       end
 
-      factory :status_name_export_item, :class => 'ExportItem' do
+      factory :status_name_export_item, class: 'ExportItem' do
         position       { 3 }
         name           { 'Status' }
         rexport_field  { 'status_name' }
       end
 
-      factory :bogus_export_item, :class => 'ExportItem' do
+      factory :bogus_export_item, class: 'ExportItem' do
         position       { 4 }
         name           { 'Bogus Item' }
         rexport_field  { 'bogus_field' }
       end
 
-      factory :grade_filter, :class => 'ExportFilter' do
+      factory :grade_filter, class: 'ExportFilter' do
         filter_field   { 'grade' }
         value          { '1' }
       end
 
-      factory :status_filter, :class => 'ExportFilter' do
+      factory :status_filter, class: 'ExportFilter' do
         filter_field   { 'status.name' }
         value          { 'active' }
       end
