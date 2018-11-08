@@ -15,10 +15,10 @@ module Rexport #:nodoc:
 
     module ClassMethods
       def resort(export_item_ids)
-        export_item_ids.each_index do |index|
-          position = index + 1
-          export_item = find(export_item_ids[index].gsub(/[^0-9]/,''))
-          export_item.update_attribute(:position, position) if export_item.position != position
+        transaction do
+          export_item_ids.each_with_index do |id, index|
+            find(id.gsub(/[^0-9]/, '')).update_attribute(:position, index + 1)
+          end
         end
       end
     end
@@ -28,9 +28,7 @@ module Rexport #:nodoc:
         attributes.slice('position', 'name', 'rexport_field')
       end
 
-      #######
       private
-      #######
 
       def replace_blank_name_with_rexport_field
         return unless name.blank?
