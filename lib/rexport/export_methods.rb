@@ -53,7 +53,7 @@ module Rexport #:nodoc:
 
     # Returns an array with the header names from the associated export_items
     def header
-      export_items.ordered.map {|i| i.name}
+      export_items.ordered.map(&:name)
     end
 
     # Returns the export model class
@@ -102,7 +102,7 @@ module Rexport #:nodoc:
           filter = export_filters.find_by(filter_field: field)
           filter.destroy if filter
         elsif new_record?
-          export_filters.build(:filter_field => field, value: value)
+          export_filters.build(filter_field: field, value: value)
         else
           filter = export_filters.find_or_create_by(filter_field: field)
           filter.update_attribute(:value, value)
@@ -127,9 +127,7 @@ module Rexport #:nodoc:
       true
     end
 
-    #########
-    protected
-    #########
+    private
 
     def get_records(limit = nil)
       get_export_values(export_model.where(build_conditions).includes(build_include).limit(limit))
@@ -186,15 +184,15 @@ module Rexport #:nodoc:
     end
 
     def rexport_fields
-      @rexport_fields ||= export_items.map {|i| i.rexport_field}
+      @rexport_fields ||= export_items.map(&:rexport_field)
     end
 
     def ordered_rexport_fields
-      export_items.ordered.map {|i| i.rexport_field}
+      export_items.ordered.map(&:rexport_field)
     end
 
     def filter_fields
-      export_filters.map {|f| f.filter_field}
+      export_filters.map(&:filter_field)
     end
 
     def save_export_items
@@ -209,7 +207,7 @@ module Rexport #:nodoc:
       position = 0
       rexport_fields.each do |rexport_field|
         position += 1
-        export_item = export_items.detect {|i| i.rexport_field == rexport_field } || export_items.create(:rexport_field => rexport_field)
+        export_item = export_items.detect {|i| i.rexport_field == rexport_field } || export_items.create(rexport_field: rexport_field)
         export_item.update_attribute(:position, position) if set_position && export_item.position != position
       end
 
