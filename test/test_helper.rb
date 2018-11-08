@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "rails"
 require 'active_record'
@@ -15,7 +18,7 @@ class ActiveSupport::TestCase
   include Rexport::Factories
 
   def setup
-    setup_db
+    suppress_output { setup_db }
     Enrollment.instance_variable_set('@rexport_fields', nil)
     Student.instance_variable_set('@rexport_fields', nil)
   end
@@ -31,9 +34,6 @@ class ActiveSupport::TestCase
   private
 
   def setup_db
-    old_stdout = $stdout
-    $stdout = StringIO.new
-
     ActiveRecord::Schema.define(version: 1) do
       create_table :enrollments do |t|
         t.integer :student_id, :status_id, :grade
@@ -77,14 +77,20 @@ class ActiveSupport::TestCase
       create_table :self_referential_checks do |t|
       end
     end
-
-    $stdout = old_stdout
   end
 
   def teardown_db
     ActiveRecord::Base.connection.data_sources.each do |table|
       ActiveRecord::Base.connection.drop_table(table)
     end
+  end
+
+  def suppress_output
+    original_stdout = $stdout.clone
+    $stdout.reopen File.new('/dev/null', 'w')
+    yield
+  ensure
+    $stdout.reopen original_stdout
   end
 end
 
