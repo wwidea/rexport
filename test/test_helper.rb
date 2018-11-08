@@ -4,14 +4,14 @@ require 'active_record'
 require "rexport"
 
 require 'minitest/autorun'
-require 'factory_girl'
+require 'factory_bot'
 require 'mocha/minitest'
 require File.dirname(__FILE__) + '/factories'
 
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
 class ActiveSupport::TestCase
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
   include Rexport::Factories
 
   def setup
