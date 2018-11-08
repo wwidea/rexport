@@ -8,7 +8,7 @@ require 'factory_girl'
 require 'mocha/minitest'
 require File.dirname(__FILE__) + '/factories'
 
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
 class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
@@ -34,7 +34,7 @@ class ActiveSupport::TestCase
     old_stdout = $stdout
     $stdout = StringIO.new
 
-    ActiveRecord::Schema.define(:version => 1) do
+    ActiveRecord::Schema.define(version: 1) do
       create_table :enrollments do |t|
         t.integer :student_id, :status_id, :grade
         t.boolean :active
@@ -99,7 +99,7 @@ class Enrollment < ActiveRecord::Base
   include Rexport::DataFields
   belongs_to :student
   belongs_to :status
-  belongs_to :ilp_status, :class_name => 'Status', :foreign_key => 'ilp_status_id'
+  belongs_to :ilp_status, class_name: 'Status', foreign_key: 'ilp_status_id'
   belongs_to :self_referential_check
 
   def foo
@@ -109,9 +109,9 @@ class Enrollment < ActiveRecord::Base
   private
 
   def Enrollment.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, :method => :foo)
-    add_rexport_field(:bad_method, :method => 'bad_method')
-    add_association_methods(:associations => %w(status ilp_status))
+    add_rexport_field(:foo_method, method: :foo)
+    add_rexport_field(:bad_method, method: 'bad_method')
+    add_association_methods(associations: %w(status ilp_status))
   end
 end
 
@@ -132,7 +132,7 @@ class Family < ActiveRecord::Base
   private
 
   def Family.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, :method => :foo)
+    add_rexport_field(:foo_method, method: :foo)
   end
 end
 
