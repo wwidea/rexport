@@ -10,10 +10,6 @@ require File.dirname(__FILE__) + '/factories'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
-RAILS_DEFAULT_LOGGER = Logger.new(File.dirname(__FILE__) + '/log/test.log')
-RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
-ActiveRecord::Base.logger = RAILS_DEFAULT_LOGGER
-
 class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
   include Rexport::Factories
