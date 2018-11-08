@@ -56,10 +56,6 @@ module Rexport #:nodoc:
       def models
         %w(override_this_method)
       end
-
-      def enabled
-        find(:all).select {|export| export.enabled? }
-      end
     end
 
     module InstanceMethods
@@ -162,10 +158,6 @@ module Rexport #:nodoc:
       def modifiable?
         # override to disable edit and destroy links for specific exports
         true
-      end
-
-      def enabled?
-        export_model.count > 0
       end
 
       #########
