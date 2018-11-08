@@ -15,7 +15,7 @@ module Rexport #:nodoc:
 
       # Returns sorted array of rexport DataFields
       def rexport_fields_array
-        rexport_fields.merge(dynamic_rexport_fields).values.sort
+        rexport_fields.values.sort
       end
 
       # Adds a data item to rexport_fields
@@ -49,7 +49,7 @@ module Rexport #:nodoc:
       # Removes files from rexport_fields
       # useful to remove content columns you don't want included in exports
       def remove_rexport_fields(*fields)
-        fields.flatten.each {|field| rexport_fields.delete(field.to_s)}
+        fields.flatten.each { |field| rexport_fields.delete(field.to_s) }
       end
 
       # Returns an array of export methods corresponding with field_names
@@ -74,11 +74,10 @@ module Rexport #:nodoc:
 
       # Returns the export method for a given field_name
       def get_rexport_method(field_name)
-        raise NoMethodError unless rexport_fields[field_name] or dynamic_rexport_fields[field_name]
         if rexport_fields[field_name]
           rexport_fields[field_name].method
         else
-          dynamic_rexport_fields[field_name].method
+          raise NoMethodError
         end
       end
 
@@ -89,21 +88,15 @@ module Rexport #:nodoc:
 
       private
 
-      # Adds content columns and columns ending in "_count" to rexport_fields, includes callback initialize_local_rexport_fields
-      # for client defined initialization
+      # Adds content columns rexport_fields, includes callback
+      # initialize_local_rexport_fields for client defined initialization
       def initialize_rexport_fields
-        (content_columns + columns.select {|c| c.name =~ /_count$/}).each do |f|
-          add_rexport_field(f.name, type: f.type)
-        end
+        content_columns.each { |field| add_rexport_field(field.name, type: field.type) }
         initialize_local_rexport_fields if respond_to?(:initialize_local_rexport_fields)
-      end
-
-      def dynamic_rexport_fields
-        respond_to?(:initialize_dynamic_rexport_fields) ? initialize_dynamic_rexport_fields : {}
       end
     end
 
-    # Return an array of formatted export for the passed methods
+    # Return an array of formatted export values for the passed methods
     def export(*methods)
       methods.flatten.map do |method|
         case value = (eval("self.#{method}", binding) rescue nil)
