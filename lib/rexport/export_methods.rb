@@ -189,7 +189,7 @@ module Rexport #:nodoc:
         result << RexportModel.new(rexport_model, path)
         get_associations(rexport_model).each do |associated_model|
           # prevent infinite loop by checking if this class is already in the result set
-          unless result.detect { |rexport_model| rexport_model.klass == associated_model.klass }
+          unless result.detect { |model| model.klass == associated_model.klass }
             get_rexport_models(associated_model.klass, result, [path, associated_model.name].compact * '.')
           end
         end
