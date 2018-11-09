@@ -102,6 +102,14 @@ class ExportMethodsTest < ActiveSupport::TestCase
     )
   end
 
+  test 'should return true for has_rexport_field?' do
+    assert build(:export).has_rexport_field?('student.family.name')
+  end
+
+  test 'should return false for has_rexport_field?' do
+    refute build(:export).has_rexport_field?('student.family.number')
+  end
+
   test 'should create copy with unique name' do
     assert_equal 'Enrollment Export Copy',      create(:export).copy.name
     assert_equal 'Enrollment Export Copy [1]',  create(:export).copy.name
