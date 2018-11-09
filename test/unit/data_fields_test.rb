@@ -84,42 +84,60 @@ class DataFieldsTest < ActiveSupport::TestCase
   end
 
   class RexportInstanceMethodsTest < DataFieldsTest
-    test 'should export fields for record' do
-      enrollment = FactoryBot.create(:enrollment)
-      assert_equal %w(1), enrollment.export('grade')
-      assert_equal %w(bar), enrollment.export('foo')
-      assert_equal [''], enrollment.export('bad_method')
-      assert_equal %w(1 bar) << Time.now.utc.strftime("%m/%d/%y"), enrollment.export('grade', 'foo', 'updated_at')
+    test 'should exoport value of data attribute' do
+      assert_equal %w(1), build(:enrollment).export('grade')
+    end
+
+    test 'should export value returned from method' do
+      assert_equal %w(bar), build(:enrollment).export('foo')
+    end
+
+    test 'should return empty string for undefined method' do
+      assert_equal [''], build(:enrollment).export('bad_method')
+    end
+
+    test 'should format date for export' do
+      assert_equal [Time.now.strftime("%m/%d/%y")], build(:enrollment).export('updated_at')
+    end
+
+    test 'should export Y for true' do
+      assert_equal %w(Y), Enrollment.new(active: true).export('active')
+    end
+
+    test 'should export N for false' do
+      assert_equal %w(N), Enrollment.new(active: false).export('active')
     end
 
     test 'should handle missing associations' do
-      enrollment = Enrollment.new
-      assert_equal [''], enrollment.export('status.name')
-      assert_equal [''], enrollment.export('student.name')
+      assert_equal [''], Enrollment.new.export('status.name')
     end
 
-    test 'should handle undefined export' do
-      enrollment = FactoryBot.create(:enrollment)
-      assert_equal ['UNDEFINED EXPORT FIELD'], enrollment.export('undefined_rexport_field')
+    test 'should handle undefined export field' do
+      assert_equal ['UNDEFINED EXPORT FIELD'], Enrollment.new.export('undefined_rexport_field')
     end
 
-    test 'should export associated fields' do
-      enrollment = FactoryBot.create(:enrollment)
-      assert_equal ['Sammy Sample'], enrollment.export('student.name')
-      assert_equal ['The Sample Family'], enrollment.export('student.family.name')
-      assert_equal %w(bar), enrollment.export('student.family.foo')
+    test 'should export value of associated data attribute' do
+      assert_equal ['The Sample Family'], build(:enrollment).export('student.family.name')
+    end
+
+    test 'should export value returned from associated method' do
+      assert_equal %w(bar), build(:enrollment).export('student.family.foo')
     end
 
     test 'should export field from non rexported model' do
-      enrollment = FactoryBot.create(:enrollment)
-      assert_equal ['active'], enrollment.export('status.name')
+      assert_equal %w(active), build(:enrollment).export('status.name')
     end
 
-    test 'should export local associated and non rexported fields' do
-      enrollment = FactoryBot.create(:enrollment)
+    test 'should export local, associated, and non rexported fields in order' do
       assert_equal(
         ['The Sample Family', 'Sammy Sample', '1', 'bar', 'active'],
-        enrollment.export('student.family.name', 'student.name', 'grade', 'student.family.foo', 'status.name')
+        build(:enrollment).export(
+          'student.family.name',
+          'student.name',
+          'grade',
+          'student.family.foo',
+          'status.name'
+        )
       )
     end
   end
