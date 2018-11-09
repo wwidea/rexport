@@ -18,14 +18,15 @@ module Rexport
       end
 
       factory :enrollment do
-        status  { |status|  status.association(:status) }
-        student { |student| student.association(:student) }
-        grade   { 1 }
+        status      { |status|  status.association(:status) }
+        student     { |student| student.association(:student) }
+        grade       { 1 }
+        updated_at  { Time.now }
       end
 
       factory :second_grade_enrollment, class: 'Enrollment' do
-        status { |status| status.association(:status) }
-        grade { 2 }
+        status  { |status| status.association(:status) }
+        grade   { 2 }
       end
 
       factory :export do
