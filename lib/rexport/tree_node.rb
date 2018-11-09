@@ -14,11 +14,8 @@ module Rexport #:nodoc:
     def add_child(*names)
       names.flatten!
       return unless name = names.shift
-      if node = children.find { |c| c.name == name }
-        node.add_child(names)
-      else
-        children << TreeNode.new(name, names)
-      end
+      node = children.find { |c| c.name == name }
+      node ? node.add_child(names) : (children << TreeNode.new(name, names))
     end
 
     # Return an array representation of the tree
