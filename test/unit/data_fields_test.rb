@@ -4,12 +4,20 @@ class DataFieldsTest < ActiveSupport::TestCase
 
   class RexportClassMethodsTest < DataFieldsTest
     test 'should initialize local rexport fields' do
-      assert_kind_of(Hash, Enrollment.rexport_fields)
-      assert_equal(%w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at), Enrollment.rexport_fields.keys.sort)
-      assert_equal('grade', Enrollment.rexport_fields[:grade].method)
-      assert_equal('foo', Enrollment.rexport_fields[:foo_method].method)
-      assert_equal(:boolean, Enrollment.rexport_fields[:active].type)
-      assert_equal(:integer, Enrollment.rexport_fields[:grade].type)
+      assert_equal(
+        %w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at),
+        Enrollment.rexport_fields.keys.sort
+      )
+    end
+
+    test 'should initialize data atributes' do
+      assert_equal 'grade',   Enrollment.rexport_fields[:grade].method
+      assert_equal :integer,  Enrollment.rexport_fields[:grade].type
+    end
+
+    test 'should initialize method' do
+      assert_equal 'foo', Enrollment.rexport_fields[:foo_method].method
+      assert_nil Enrollment.rexport_fields[:foo_method].type
     end
 
     test 'should return sorted data fields array' do
@@ -40,15 +48,22 @@ class DataFieldsTest < ActiveSupport::TestCase
     end
 
     test 'should get rexport methods' do
-      assert_equal %w(grade),                   Enrollment.get_rexport_methods(:grade)
-      assert_equal %w(status.name),             Enrollment.get_rexport_methods(:status_name)
-      assert_equal %w(undefined_rexport_field), Enrollment.get_rexport_methods('bad_association.test')
-      assert_equal %w(undefined_rexport_field), Enrollment.get_rexport_methods('student.bad_method')
-      assert_equal %w(student.name),            Enrollment.get_rexport_methods('student.name')
-      assert_equal %w(student.family.foo),      Enrollment.get_rexport_methods('student.family.foo_method')
       assert_equal(
-        ['student.family.foo', 'student.name', 'undefined_rexport_field', 'undefined_rexport_field', 'status.name', 'grade'],
-        Enrollment.get_rexport_methods('student.family.foo_method', 'student.name', 'student.bad_method', 'bad_association.test', 'status_name', 'grade')
+        ['student.family.foo',
+          'student.name',
+          'undefined_rexport_field',
+          'undefined_rexport_field',
+          'status.name',
+          'grade'
+        ],
+        Enrollment.get_rexport_methods(
+          'student.family.foo_method',
+          'student.name',
+          'student.bad_method',
+          'bad_association.test',
+          'status_name',
+          'grade'
+        )
       )
     end
 
@@ -69,17 +84,17 @@ class DataFieldsTest < ActiveSupport::TestCase
       assert_equal Family, Enrollment.get_klass_from_associations('student', 'family')
     end
 
-    test 'should rasie no method error for missing associations' do
+    test 'should raise no method error for missing associations' do
       assert_raise NoMethodError do
         Enrollment.get_klass_from_associations('not_an_association')
       end
     end
 
-    test 'reset column information with rexport reset' do
+    test 'should reset column information with rexport_reset' do
+      Enrollment.expects(:initialize_rexport_fields).times(2).returns(true)
       assert Enrollment.rexport_fields
-      assert Enrollment.instance_variable_get('@rexport_fields')
       Enrollment.reset_column_information
-      assert_nil Enrollment.instance_variable_get('@rexport_fields')
+      assert Enrollment.rexport_fields
     end
   end
 
