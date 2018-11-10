@@ -110,6 +110,50 @@ class ExportMethodsTest < ActiveSupport::TestCase
     refute build(:export).has_rexport_field?('student.family.number')
   end
 
+  test 'should persist export_items from a hash' do
+    assert_equal %w(a b c), rexport_fields_for(create_export(a: 1, b: 1, c: 1))
+  end
+
+  test 'should persist export_items from an array' do
+    assert_equal %w(a b c), rexport_fields_for(create_export(%w(a b c)))
+  end
+
+  test 'should add export_item to exising export on update' do
+    export = create_export(%w(a c))
+    assert_difference 'ExportItem.count' do
+      export.update_attribute(:rexport_fields, %w(a b c))
+    end
+    assert_equal %w(a b c), rexport_fields_for(export)
+  end
+
+  test 'should delete export_item that is not in rexport_fields on update' do
+    export = create_export(%w(a b c))
+    assert_difference 'ExportItem.count', -1 do
+      export.update_attribute(:rexport_fields, %w(a c))
+    end
+    assert_equal %w(a c), rexport_fields_for(export)
+  end
+
+  test 'should re-order export_items when passed an array of export_fields on update' do
+    export = create_export(%w(a b c))
+    export.update_attribute(:rexport_fields, %w(c b a))
+    assert_equal %w(c b a), rexport_fields_for(export)
+  end
+
+  test 'should not re-order export_items when passed a hash of export_fields on update' do
+    export = create_export(%w(a b c))
+    export.update_attribute(:rexport_fields, {c: 1, b: 1, a: 1})
+    assert_equal %w(a b c), rexport_fields_for(export)
+  end
+
+  test 'should not modify export_items on update when no export_fields are passed' do
+    export = create_export(%w(a b c))
+    assert_no_difference 'ExportItem.count' do
+      export.update_attribute(:name, 'New Name')
+    end
+    assert_equal %w(a b c), rexport_fields_for(export)
+  end
+
   test 'should create copy with unique name' do
     assert_equal 'Enrollment Export Copy',      create(:export).copy.name
     assert_equal 'Enrollment Export Copy [1]',  create(:export).copy.name
@@ -128,5 +172,15 @@ class ExportMethodsTest < ActiveSupport::TestCase
     assert_difference 'ExportFilter.count', export.export_filters.count do
       export.copy
     end
+  end
+
+  private
+
+  def create_export(fields = {})
+    Export.create(name: 'test', model_class_name: 'Enrollment', rexport_fields: fields)
+  end
+
+  def rexport_fields_for(export)
+    export.export_items.ordered.map(&:rexport_field)
   end
 end
