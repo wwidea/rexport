@@ -85,10 +85,10 @@ module Rexport #:nodoc:
     def rexport_fields=(rexport_fields)
       @rexport_fields = if rexport_fields.respond_to?(:keys)
         @set_position = false
-        rexport_fields.keys
+        rexport_fields.keys.map(&:to_s)
       else
         @set_position = true
-        rexport_fields
+        rexport_fields.map(&:to_s)
       end
     end
 
@@ -200,8 +200,6 @@ module Rexport #:nodoc:
         end
       end
 
-      export_items.reset
-
       position = 0
       rexport_fields.each do |rexport_field|
         position += 1
@@ -209,8 +207,6 @@ module Rexport #:nodoc:
         export_item.update_attribute(:position, position) if set_position
       end
 
-      export_items.reset
-      @rexport_fields = nil
       return true
     end
 
