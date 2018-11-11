@@ -174,6 +174,14 @@ class ExportMethodsTest < ActiveSupport::TestCase
     end
   end
 
+  test 'should return filter_value for filter_field' do
+    assert_equal 'active', create(:filtered_export).filter_value('status.name')
+  end
+
+  test 'should return nil for filter_value when no matching export_filters' do
+    assert_nil create(:filtered_export).filter_value('does_not_exist')
+  end
+
   test 'should create copy with unique name' do
     assert_equal 'Enrollment Export Copy',      create(:export).copy.name
     assert_equal 'Enrollment Export Copy [1]',  create(:export).copy.name
@@ -192,6 +200,10 @@ class ExportMethodsTest < ActiveSupport::TestCase
     assert_difference 'ExportFilter.count', export.export_filters.count do
       export.copy
     end
+  end
+
+  test 'should return true for modifiable?' do
+    assert Export.new.modifiable?
   end
 
   private
