@@ -1,6 +1,6 @@
 class CreateExportTables < ActiveRecord::Migration
   def self.up
-    create_table "export_filters", :force => true do |t|
+    create_table "export_filters", force: true do |t|
       t.integer  "export_id"
       t.string   "field"
       t.string   "value"
@@ -8,7 +8,7 @@ class CreateExportTables < ActiveRecord::Migration
       t.datetime "updated_at"
     end
 
-    create_table "export_items", :force => true do |t|
+    create_table "export_items", force: true do |t|
       t.integer  "export_id"
       t.integer  "position"
       t.string   "name"
@@ -17,7 +17,7 @@ class CreateExportTables < ActiveRecord::Migration
       t.datetime "updated_at"
     end
 
-    create_table "exports", :force => true do |t|
+    create_table "exports", force: true do |t|
       t.string   "name"
       t.string   "model_class_name"
       t.text     "description"

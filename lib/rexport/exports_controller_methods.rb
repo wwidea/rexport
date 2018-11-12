@@ -9,7 +9,7 @@ module Rexport
 
       respond_to do |format|
         format.html # show.html.erb
-        format.csv { send_data(@export.to_csv, :type => export_content_type, :filename => filename) }
+        format.csv { send_data(@export.to_csv, type: export_content_type, filename: filename) }
       end
     end
 

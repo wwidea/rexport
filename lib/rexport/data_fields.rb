@@ -1,33 +1,11 @@
 module Rexport #:nodoc:
-
-  # Stores the name and method of the export data item
-  class DataField
-    include Comparable
-    attr_accessor :name, :method, :type
-
-    def initialize(name, options = {})
-      self.name = name.to_s
-      self.method = options[:method].blank? ? self.name : options[:method].to_s
-      self.type = options[:type]
-    end
-
-    def <=>(rf)
-      self.name <=> rf.name
-    end
-  end
-
   module DataFields
-    def self.included( base )
-      base.extend( ClassMethods )
-      base.class_eval do
-        include InstanceMethods
-        prepend ClassMethods
-      end
-    end
+    extend ActiveSupport::Concern
 
     module ClassMethods
       # Returns hash of exportable data items
       def rexport_fields
+        @rexport_fields ||= nil
         unless @rexport_fields
           @rexport_fields = HashWithIndifferentAccess.new
           initialize_rexport_fields
@@ -37,7 +15,7 @@ module Rexport #:nodoc:
 
       # Returns sorted array of rexport DataFields
       def rexport_fields_array
-        rexport_fields.merge(dynamic_rexport_fields).values.sort
+        rexport_fields.values.sort
       end
 
       # Adds a data item to rexport_fields
@@ -48,7 +26,7 @@ module Rexport #:nodoc:
       # Adds associated methods to rexport_fields
       #   :associations - an association or arrary of associations
       #   :methods - a method or array of methods
-      #   :filter - if true will send :type => :association to add_report_field
+      #   :filter - if true will send type: :association to add_report_field
       def add_association_methods(options = {})
         options.stringify_keys!
         options.assert_valid_keys(%w(associations methods filter))
@@ -63,7 +41,7 @@ module Rexport #:nodoc:
 
         associations.each do |association|
           methods.each do |method|
-            add_rexport_field("#{association}_#{method}", :method => "#{association}.#{method}", :type => type)
+            add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
           end
         end
       end
@@ -71,7 +49,7 @@ module Rexport #:nodoc:
       # Removes files from rexport_fields
       # useful to remove content columns you don't want included in exports
       def remove_rexport_fields(*fields)
-        fields.flatten.each {|field| rexport_fields.delete(field.to_s)}
+        fields.flatten.each { |field| rexport_fields.delete(field.to_s) }
       end
 
       # Returns an array of export methods corresponding with field_names
@@ -96,11 +74,10 @@ module Rexport #:nodoc:
 
       # Returns the export method for a given field_name
       def get_rexport_method(field_name)
-        raise NoMethodError unless rexport_fields[field_name] or dynamic_rexport_fields[field_name]
         if rexport_fields[field_name]
           rexport_fields[field_name].method
         else
-          dynamic_rexport_fields[field_name].method
+          raise NoMethodError
         end
       end
 
@@ -111,40 +88,32 @@ module Rexport #:nodoc:
 
       private
 
-      # Adds content columns and columns ending in "_count" to rexport_fields, includes callback initialize_local_rexport_fields
-      # for client defined initialization
+      # Adds content columns rexport_fields, includes callback
+      # initialize_local_rexport_fields for client defined initialization
       def initialize_rexport_fields
-        (content_columns + columns.select {|c| c.name =~ /_count$/}).each do |f|
-          add_rexport_field(f.name, :type => f.type)
-        end
+        content_columns.each { |field| add_rexport_field(field.name, type: field.type) }
         initialize_local_rexport_fields if respond_to?(:initialize_local_rexport_fields)
-      end
-
-      def dynamic_rexport_fields
-        respond_to?(:initialize_dynamic_rexport_fields) ? initialize_dynamic_rexport_fields : {}
       end
     end
 
-    module InstanceMethods
-      # Return an array of formatted export for the passed methods
-      def export(*methods)
-        methods.flatten.map do |method|
-          case value = (eval("self.#{method}", binding) rescue nil)
-            when Date, Time
-              value.strftime("%m/%d/%y")
-            when TrueClass
-              'Y'
-            when FalseClass
-              'N'
-            else value.to_s
-          end
+    # Return an array of formatted export values for the passed methods
+    def export(*methods)
+      methods.flatten.map do |method|
+        case value = (eval("self.#{method}", binding) rescue nil)
+          when Date, Time
+            value.strftime("%m/%d/%y")
+          when TrueClass
+            'Y'
+          when FalseClass
+            'N'
+          else value.to_s
         end
       end
+    end
 
-      # Returns string indicating this field is undefined
-      def undefined_rexport_field
-        'UNDEFINED EXPORT FIELD'
-      end
+    # Returns string indicating this field is undefined
+    def undefined_rexport_field
+      'UNDEFINED EXPORT FIELD'
     end
   end
 end

@@ -3,115 +3,157 @@ require 'test_helper'
 class DataFieldsTest < ActiveSupport::TestCase
 
   class RexportClassMethodsTest < DataFieldsTest
-    def test_should_initialize_local_rexport_fields
-      assert_kind_of(Hash, Enrollment.rexport_fields)
-      assert_equal(%w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at), Enrollment.rexport_fields.keys.sort)
-      assert_equal('grade', Enrollment.rexport_fields[:grade].method)
-      assert_equal('foo', Enrollment.rexport_fields[:foo_method].method)
-      assert_equal(:boolean, Enrollment.rexport_fields[:active].type)
-      assert_equal(:integer, Enrollment.rexport_fields[:grade].type)
+    test 'should initialize local rexport fields' do
+      assert_equal(
+        %w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at),
+        Enrollment.rexport_fields.keys.sort
+      )
     end
-    
-    def test_should_return_sorted_data_fields_array
-      assert_equal(%w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at),
-        Enrollment.rexport_fields_array.map {|df| df.name})
+
+    test 'should initialize data atributes' do
+      assert_equal 'grade',   Enrollment.rexport_fields[:grade].method
+      assert_equal :integer,  Enrollment.rexport_fields[:grade].type
     end
-    
-    def test_should_add_single_association_method_to_rexport_fields
+
+    test 'should initialize method' do
+      assert_equal 'foo', Enrollment.rexport_fields[:foo_method].method
+      assert_nil Enrollment.rexport_fields[:foo_method].type
+    end
+
+    test 'should return sorted data fields array' do
+      assert_equal(
+        %w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at),
+        Enrollment.rexport_fields_array.map(&:name)
+      )
+    end
+
+    test 'should add single association method to rexport_fields' do
       assert_difference('Enrollment.rexport_fields.length') do
-        Enrollment.add_association_methods(:associations => 'test_association')
+        Enrollment.add_association_methods(associations: 'test_association')
       end
-      assert_equal('test_association_name', Enrollment.rexport_fields[:test_association_name].name)
-      assert_equal('test_association.name', Enrollment.rexport_fields[:test_association_name].method)
+      assert_equal 'test_association_name', Enrollment.rexport_fields[:test_association_name].name
+      assert_equal 'test_association.name', Enrollment.rexport_fields[:test_association_name].method
     end
-    
-    def test_should_add_name_methods_for_multiple_associations
+
+    test 'should add name methods for multiple associations' do
       assert_difference('Enrollment.rexport_fields.length', 3) do
-        Enrollment.add_association_methods(:associations => %w(a b c))
+        Enrollment.add_association_methods(associations: %w(a b c))
       end
     end
-    
-    def test_should_add_multiple_methods_for_multiple_associations
+
+    test 'should add multiple methods for multiple associations' do
       assert_difference('Enrollment.rexport_fields.length', 9) do
-        Enrollment.add_association_methods(:associations => %w(a1 a2 a3), :methods => %w(m1 m2 m3))
+        Enrollment.add_association_methods(associations: %w(a1 a2 a3), methods: %w(m1 m2 m3))
       end
     end
-    
-    def test_should_get_rexport_methods
-      assert_equal(%w(grade), Enrollment.get_rexport_methods(:grade))
-      assert_equal(%w(status.name), Enrollment.get_rexport_methods(:status_name))
-      assert_equal(%w(undefined_rexport_field), Enrollment.get_rexport_methods('bad_association.test'))
-      assert_equal(%w(undefined_rexport_field), Enrollment.get_rexport_methods('student.bad_method'))
-      assert_equal(%w(student.name), Enrollment.get_rexport_methods('student.name'))
-      assert_equal(%w(student.family.foo), Enrollment.get_rexport_methods('student.family.foo_method'))
-      assert_equal(['student.family.foo', 'student.name', 'undefined_rexport_field', 'undefined_rexport_field', 'status.name', 'grade'],
-        Enrollment.get_rexport_methods('student.family.foo_method', 'student.name', 'student.bad_method', 'bad_association.test', 'status_name', 'grade'))
+
+    test 'should get rexport methods' do
+      assert_equal(
+        ['student.family.foo',
+          'student.name',
+          'undefined_rexport_field',
+          'undefined_rexport_field',
+          'status.name',
+          'grade'
+        ],
+        Enrollment.get_rexport_methods(
+          'student.family.foo_method',
+          'student.name',
+          'student.bad_method',
+          'bad_association.test',
+          'status_name',
+          'grade'
+        )
+      )
     end
-    
-    def test_should_remove_single_rexport_field
-      assert(Enrollment.rexport_fields[:grade])
-      assert(Enrollment.remove_rexport_fields(:grade))
-      assert_nil(Enrollment.rexport_fields[:grade])
+
+    test 'should remove single rexport field' do
+      assert      Enrollment.rexport_fields[:grade]
+      assert      Enrollment.remove_rexport_fields(:grade)
+      assert_nil  Enrollment.rexport_fields[:grade]
     end
-    
-    def test_should_remove_multiple_rexport_fields
+
+    test 'should remove multiple rexport fields' do
       fields = %w(grade status_name foo_method)
-      fields.each {|field| assert(Enrollment.rexport_fields[field])}
-      assert(Enrollment.remove_rexport_fields(fields))
-      fields.each {|field| assert_nil(Enrollment.rexport_fields[field])}
+      fields.each { |field| assert(Enrollment.rexport_fields[field]) }
+      assert Enrollment.remove_rexport_fields(fields)
+      fields.each { |field| assert_nil(Enrollment.rexport_fields[field]) }
     end
-    
-    def test_should_get_klass_from_assocations
-      assert_equal(Family, Enrollment.get_klass_from_associations('student', 'family'))
+
+    test 'should get klass from assocations' do
+      assert_equal Family, Enrollment.get_klass_from_associations('student', 'family')
     end
-    
-    def test_should_rasie_no_method_error_for_missing_associations
-      assert_raise(NoMethodError) { Enrollment.get_klass_from_associations('not_an_association') }
+
+    test 'should raise no method error for missing associations' do
+      assert_raise NoMethodError do
+        Enrollment.get_klass_from_associations('not_an_association')
+      end
     end
-    
-    def test_reset_column_information_with_rexport_reset
-      assert(Enrollment.rexport_fields)
-      assert(Enrollment.instance_variable_get('@rexport_fields'))
+
+    test 'should reset column information with rexport_reset' do
+      Enrollment.expects(:initialize_rexport_fields).times(2).returns(true)
+      assert Enrollment.rexport_fields
       Enrollment.reset_column_information
-      assert_nil(Enrollment.instance_variable_get('@rexport_fields'))
+      assert Enrollment.rexport_fields
     end
   end
-  
+
   class RexportInstanceMethodsTest < DataFieldsTest
-    def test_should_export_fields_for_record
-      enrollment = FactoryGirl.create(:enrollment)
-      assert_equal(%w(1), enrollment.export('grade'))
-      assert_equal(%w(bar), enrollment.export('foo'))
-      assert_equal([''], enrollment.export('bad_method'))
-      assert_equal(%w(1 bar) << Date.today.strftime("%m/%d/%y"), enrollment.export('grade', 'foo', 'updated_at'))
+    test 'should exoport value of data attribute' do
+      assert_equal %w(1), build(:enrollment).export('grade')
     end
-  
-    def test_should_handle_missing_associations
-      enrollment = Enrollment.new
-      assert_equal([''], enrollment.export('status.name'))
-      assert_equal([''], enrollment.export('student.name'))
+
+    test 'should export value returned from method' do
+      assert_equal %w(bar), build(:enrollment).export('foo')
     end
-  
-    def test_should_handle_undefined_export
-      enrollment = FactoryGirl.create(:enrollment)
-      assert_equal(['UNDEFINED EXPORT FIELD'], enrollment.export('undefined_rexport_field'))
+
+    test 'should return empty string for undefined method' do
+      assert_equal [''], build(:enrollment).export('bad_method')
     end
-  
-    def test_should_export_associated_fields
-      enrollment = FactoryGirl.create(:enrollment)
-      assert_equal(['Sammy Sample'], enrollment.export('student.name'))
-      assert_equal(['The Sample Family'], enrollment.export('student.family.name'))
-      assert_equal(%w(bar), enrollment.export('student.family.foo'))
+
+    test 'should format date for export' do
+      assert_equal [Time.now.strftime("%m/%d/%y")], build(:enrollment).export('updated_at')
     end
-  
-    def test_should_export_field_from_non_rexported_model
-      enrollment = FactoryGirl.create(:enrollment)
-      assert_equal(['active'], enrollment.export('status.name'))
+
+    test 'should export Y for true' do
+      assert_equal %w(Y), Enrollment.new(active: true).export('active')
     end
-  
-    def test_should_export_local_associated_and_non_rexported_fields
-      enrollment = FactoryGirl.create(:enrollment)
-      assert_equal(['The Sample Family', 'Sammy Sample', '1', 'bar', 'active'], enrollment.export('student.family.name', 'student.name', 'grade', 'student.family.foo', 'status.name'))
+
+    test 'should export N for false' do
+      assert_equal %w(N), Enrollment.new(active: false).export('active')
+    end
+
+    test 'should handle missing associations' do
+      assert_equal [''], Enrollment.new.export('status.name')
+    end
+
+    test 'should handle undefined export field' do
+      assert_equal ['UNDEFINED EXPORT FIELD'], Enrollment.new.export('undefined_rexport_field')
+    end
+
+    test 'should export value of associated data attribute' do
+      assert_equal ['The Sample Family'], build(:enrollment).export('student.family.name')
+    end
+
+    test 'should export value returned from associated method' do
+      assert_equal %w(bar), build(:enrollment).export('student.family.foo')
+    end
+
+    test 'should export field from non rexported model' do
+      assert_equal %w(active), build(:enrollment).export('status.name')
+    end
+
+    test 'should export local, associated, and non rexported fields in order' do
+      assert_equal(
+        ['The Sample Family', 'Sammy Sample', '1', 'bar', 'active'],
+        build(:enrollment).export(
+          'student.family.name',
+          'student.name',
+          'grade',
+          'student.family.foo',
+          'status.name'
+        )
+      )
     end
   end
 end

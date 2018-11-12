@@ -1,29 +1,26 @@
-require 'minitest/autorun'
-require 'rubygems'
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/test/'
+end
+
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "rails"
 require 'active_record'
-require 'active_support/test_case'
-require 'logger'
-require 'factory_girl'
-require 'mocha/mini_test'
+require "rexport"
+
+require 'minitest/autorun'
+require 'factory_bot'
+require 'mocha/minitest'
 require File.dirname(__FILE__) + '/factories'
-require File.dirname(__FILE__) + '/../lib/rexport/data_fields'
-require File.dirname(__FILE__) + '/../lib/rexport/export_methods'
-require File.dirname(__FILE__) + '/../lib/rexport/export_item_methods'
-require File.dirname(__FILE__) + '/../lib/rexport/export_filter_methods'
-require File.dirname(__FILE__) + '/../lib/rexport/tree_node'
 
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
-
-RAILS_DEFAULT_LOGGER = Logger.new(File.dirname(__FILE__) + '/log/test.log')
-RAILS_DEFAULT_LOGGER.level = Logger::DEBUG
-ActiveRecord::Base.logger = RAILS_DEFAULT_LOGGER
+ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
 class ActiveSupport::TestCase
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
   include Rexport::Factories
 
   def setup
-    setup_db
+    suppress_output { setup_db }
     Enrollment.instance_variable_set('@rexport_fields', nil)
     Student.instance_variable_set('@rexport_fields', nil)
   end
@@ -32,17 +29,10 @@ class ActiveSupport::TestCase
     teardown_db
   end
 
-  # Placeholder so test/unit ignores test cases without any tests.
-  def default_test
-  end
-
   private
 
   def setup_db
-    old_stdout = $stdout
-    $stdout = StringIO.new
-
-    ActiveRecord::Schema.define(:version => 1) do
+    ActiveRecord::Schema.define(version: 1) do
       create_table :enrollments do |t|
         t.integer :student_id, :status_id, :grade
         t.boolean :active
@@ -85,14 +75,20 @@ class ActiveSupport::TestCase
       create_table :self_referential_checks do |t|
       end
     end
-
-    $stdout = old_stdout
   end
 
   def teardown_db
     ActiveRecord::Base.connection.data_sources.each do |table|
       ActiveRecord::Base.connection.drop_table(table)
     end
+  end
+
+  def suppress_output
+    original_stdout = $stdout.clone
+    $stdout.reopen File.new('/dev/null', 'w')
+    yield
+  ensure
+    $stdout.reopen original_stdout
   end
 end
 
@@ -107,7 +103,7 @@ class Enrollment < ActiveRecord::Base
   include Rexport::DataFields
   belongs_to :student
   belongs_to :status
-  belongs_to :ilp_status, :class_name => 'Status', :foreign_key => 'ilp_status_id'
+  belongs_to :ilp_status, class_name: 'Status', foreign_key: 'ilp_status_id'
   belongs_to :self_referential_check
 
   def foo
@@ -117,9 +113,9 @@ class Enrollment < ActiveRecord::Base
   private
 
   def Enrollment.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, :method => :foo)
-    add_rexport_field(:bad_method, :method => 'bad_method')
-    add_association_methods(:associations => %w(status ilp_status))
+    add_rexport_field(:foo_method, method: :foo)
+    add_rexport_field(:bad_method, method: 'bad_method')
+    add_association_methods(associations: %w(status ilp_status))
   end
 end
 
@@ -140,7 +136,7 @@ class Family < ActiveRecord::Base
   private
 
   def Family.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, :method => :foo)
+    add_rexport_field(:foo_method, method: :foo)
   end
 end
 

@@ -3,8 +3,8 @@
   <h4>Options</h4>
   <ul>
     <li><%= link_to("#{image_tag('icon_edit.gif')} Edit".html_safe, edit_export_path(@export)) if @export.modifiable? %></li>
-    <li><%= link_to "#{image_tag('icon_export.png')} Export".html_safe, export_path(@export, :format => :csv)  %></li>
-    <li><%= link_to "#{image_tag('icon_copy.png')} Copy".html_safe, exports_path(:original_export_id => @export.id), :method => :post %></li>
+    <li><%= link_to "#{image_tag('icon_export.png')} Export".html_safe, export_path(@export, format: :csv)  %></li>
+    <li><%= link_to "#{image_tag('icon_copy.png')} Copy".html_safe, exports_path(:original_export_id => @export.id), method: :post %></li>
   </ul>
 </div>
 <div class="show_export_info">
@@ -29,14 +29,14 @@
       <th class='action_icons'>&nbsp;</th>
     </tr>
   </thead>
-  <%= content_tag :tbody, {:id => 'export_items'}.merge(@export.modifiable? ? {:class => 'sortable', 'data-url' => export_item_sorting_path} : {}) do %>
-    <%= render :partial => @export.export_items.ordered %>
+  <%= content_tag :tbody, {id: 'export_items'}.merge(@export.modifiable? ? {class: 'sortable', 'data-url' => export_item_sorting_path} : {}) do %>
+    <%= render partial: @export.export_items.ordered %>
   <% end %>
 </table>
 
-<%= content_tag(:p, 'Drag and drop the rows in the table above to re-order the export data left to right in the output (see sample below).', :class => 'instructions') if @export.modifiable? %>
+<%= content_tag(:p, 'Drag and drop the rows in the table above to re-order the export data left to right in the output (see sample below).', class: 'instructions') if @export.modifiable? %>
 
-<%= render(:partial => 'filters') unless @export.export_filters.blank? %>
+<%= render(partial: 'filters') unless @export.export_filters.blank? %>
 
 <div class='scrolling'>
   <table>
