@@ -14,4 +14,4 @@ Ruby on Rails gem to manage exports
 
 ==License
 
-Copyright (c) 2008-2012 WWIDEA, released under the MIT license
+Copyright (c) 2008-2018 Brightways Learning, released under the MIT license
