@@ -52,13 +52,17 @@ module Rexport
     end
 
     def export_params
-      params.require(:export).permit(
+      params.require(:export).permit(permitted_params)
+    end
+
+    def permitted_params
+      [
         :name,
         :model_class_name,
         :description,
         rexport_fields: {},
         export_filter_attributes: {}
-      )
+      ]
     end
 
     def export_content_type
