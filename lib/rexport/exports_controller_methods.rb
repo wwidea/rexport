@@ -5,11 +5,11 @@ module Rexport
     end
 
     def show
-      @export = Export.find(params[:id])
+      export
 
       respond_to do |format|
         format.html # show.html.erb
-        format.csv { send_data(@export.to_csv, type: export_content_type, filename: filename) }
+        format.csv { send_data(export.to_csv, type: export_content_type, filename: filename) }
       end
     end
 
@@ -18,7 +18,7 @@ module Rexport
     end
 
     def edit
-      @export = Export.find(params[:id])
+      export
     end
 
     def create
@@ -32,23 +32,24 @@ module Rexport
     end
 
     def update
-      @export = Export.find(params[:id])
-
-      if @export.update_attributes(export_params)
-        redirect_to @export, notice: 'Export was successfully updated.'
+      if export.update_attributes(export_params)
+        redirect_to export, notice: 'Export was successfully updated.'
       else
         render :edit
       end
     end
 
     def destroy
-      @export = Export.find(params[:id])
-      @export.destroy
+      export.destroy
 
       redirect_to exports_url
     end
 
     private
+
+    def export
+      @export ||= Export.find(params[:id])
+    end
 
     def export_params
       params.require(:export).permit(
@@ -65,7 +66,7 @@ module Rexport
     end
 
     def filename
-      "#{@export.model_class_name}_#{@export.name.gsub(/ /, '_')}_#{Time.now.strftime('%Y%m%d')}.csv"
+      "#{export.model_class_name}_#{export.name.gsub(/ /, '_')}_#{Time.now.strftime('%Y%m%d')}.csv"
     end
   end
 end
