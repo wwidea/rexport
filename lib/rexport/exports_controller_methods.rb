@@ -32,7 +32,7 @@ module Rexport
     end
 
     def update
-      if export.update_attributes(export_params)
+      if export.update(export_params)
         redirect_to export, notice: 'Export was successfully updated.'
       else
         render :edit

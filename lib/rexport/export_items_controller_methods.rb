@@ -5,7 +5,7 @@ module Rexport
     end
 
     def update
-      if export_item.update_attributes(export_item_params)
+      if export_item.update(export_item_params)
         redirect_to export_path(export_item.export), notice: 'ExportItem was successfully updated.'
       else
         render :edit
