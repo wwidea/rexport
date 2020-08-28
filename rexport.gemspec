@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails',   '>= 4.0.1'
   s.add_dependency 'loofah',  '>= 2.3.1'
 
-  s.add_development_dependency 'factory_bot',   '~> 4.7'
-  s.add_development_dependency 'sqlite3',       '~> 1.3'
-  s.add_development_dependency 'mocha',         '~> 1.0'
+  s.add_development_dependency 'factory_bot',   '~> 6.1'
+  s.add_development_dependency 'sqlite3',       '~> 1.4'
+  s.add_development_dependency 'mocha',         '~> 1.11'
 
 end
