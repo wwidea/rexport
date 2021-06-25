@@ -138,7 +138,7 @@ module Rexport #:nodoc:
 
     def get_rexport_models(rexport_model, result = [], path = nil)
       return unless rexport_model.respond_to?(:rexport_fields)
-      result << RexportModel.new(rexport_model, path)
+      result << RexportModel.new(rexport_model, path: path)
       get_associations(rexport_model).each do |associated_model|
         # prevent infinite loop by checking if this class is already in the result set
         unless result.detect { |model| model.klass == associated_model.klass }

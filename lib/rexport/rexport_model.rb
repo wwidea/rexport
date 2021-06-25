@@ -2,7 +2,7 @@ module Rexport #:nodoc:
   class RexportModel
     attr_accessor :klass, :path
 
-    def initialize(klass, path = nil)
+    def initialize(klass, path: nil)
       self.klass = klass
       self.path = path.to_s unless path.blank?
     end
