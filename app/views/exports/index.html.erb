@@ -25,8 +25,8 @@
       <td class="table_icons">
         <%= link_to_export export_path(export, format: :csv), text: false  %>
         <%= link_to_show export, text: false %>
-        <%= link_to(image_tag('icon_edit.gif'), edit_export_path(export), title: 'Edit') if export.modifiable? %>
-        <%= link_to_delete(export, text: false) if export.modifiable? %>
+        <%= link_to(image_tag('icon_edit.gif'), edit_export_path(export), title: 'Edit') %>
+        <%= link_to_delete(export, text: false) %>
       </td>
     </tr>
   <% end %>

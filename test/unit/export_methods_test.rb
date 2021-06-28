@@ -202,10 +202,6 @@ class ExportMethodsTest < ActiveSupport::TestCase
     end
   end
 
-  test 'should return true for modifiable?' do
-    assert Export.new.modifiable?
-  end
-
   private
 
   def create_export(fields: {}, filters: {})

@@ -117,11 +117,6 @@ module Rexport #:nodoc:
       end
     end
 
-    def modifiable?
-      # override to disable edit and destroy links for specific exports
-      true
-    end
-
     private
 
     def get_records(limit = nil)
