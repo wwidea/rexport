@@ -57,6 +57,10 @@ module Rexport #:nodoc:
       model_class_name.constantize
     end
 
+    def rexport_model
+      @rexport_model ||= RexportModel.new(export_model)
+    end
+
     # Returns an array of RexportModels including export_model and associated rexport capable models
     def rexport_models
       @rexport_models ||= get_rexport_models(export_model)
@@ -131,21 +135,21 @@ module Rexport #:nodoc:
       objects.map { |object| object.export(rexport_methods) }
     end
 
-    def get_rexport_models(rexport_model, result = [], path = nil)
-      return unless rexport_model.respond_to?(:rexport_fields)
-      result << RexportModel.new(rexport_model, path: path)
-      get_associations(rexport_model).each do |associated_model|
-        # prevent infinite loop by checking if this class is already in the result set
-        unless result.detect { |model| model.klass == associated_model.klass }
-          get_rexport_models(associated_model.klass, result, [path, associated_model.name].compact * '.')
+    def get_rexport_models(model, results = [], path = nil)
+      return unless model.include?(Rexport::DataFields)
+      results << RexportModel.new(model, path: path)
+      get_associations(model).each do |associated_model|
+        # prevent infinite loop by checking if this class is already in the results set
+        unless results.detect { |result| result.klass == associated_model.klass }
+          get_rexport_models(associated_model.klass, results, [path, associated_model.name].compact * '.')
         end
       end
-      return result
+      return results
     end
 
-    def get_associations(rexport_model)
+    def get_associations(model)
       %i(belongs_to has_one).map do |type|
-        rexport_model.reflect_on_all_associations(type)
+        model.reflect_on_all_associations(type)
       end.flatten.reject(&:polymorphic?)
     end
 
@@ -172,7 +176,7 @@ module Rexport #:nodoc:
     end
 
     def rexport_methods
-      @rexport_methods ||= export_model.get_rexport_methods(ordered_rexport_fields)
+      @rexport_methods ||= rexport_model.get_rexport_methods(ordered_rexport_fields)
     end
 
     def rexport_fields

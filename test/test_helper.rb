@@ -158,9 +158,6 @@ class ExportFilter < ActiveRecord::Base
 end
 
 class SelfReferentialCheck < ActiveRecord::Base
+  include Rexport::DataFields
   belongs_to :enrollment
-
-  def SelfReferentialCheck.rexport_fields
-    'trick get_rexport_models into believing we are exportable'
-  end
 end
