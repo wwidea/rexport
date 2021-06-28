@@ -16,8 +16,11 @@ module Rexport #:nodoc:
     end
 
     def collection_from_association(association)
-      return klass.send("find_#{association}_for_rexport") if klass.respond_to?("find_#{association}_for_rexport")
-      klass.reflect_on_association(association.to_sym).klass.all
+      if klass.respond_to?("find_#{association}_for_rexport")
+        klass.public_send("find_#{association}_for_rexport")
+      else
+        klass.reflect_on_association(association.to_sym).klass.all
+      end
     end
 
     def filter_column(field)
