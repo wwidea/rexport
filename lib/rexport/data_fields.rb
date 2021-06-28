@@ -92,7 +92,7 @@ module Rexport #:nodoc:
       # initialize_local_rexport_fields for client defined initialization
       def initialize_rexport_fields
         content_columns.each { |field| add_rexport_field(field.name, type: field.type) }
-        initialize_local_rexport_fields if respond_to?(:initialize_local_rexport_fields)
+        initialize_local_rexport_fields(self) if respond_to?(:initialize_local_rexport_fields)
       end
     end
 

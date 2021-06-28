@@ -112,10 +112,10 @@ class Enrollment < ActiveRecord::Base
 
   private
 
-  def Enrollment.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, method: :foo)
-    add_rexport_field(:bad_method, method: 'bad_method')
-    add_association_methods(associations: %w(status ilp_status))
+  def Enrollment.initialize_local_rexport_fields(rexport_model)
+    rexport_model.add_rexport_field(:foo_method, method: :foo)
+    rexport_model.add_rexport_field(:bad_method, method: 'bad_method')
+    rexport_model.add_association_methods(associations: %w(status ilp_status))
   end
 end
 
@@ -135,8 +135,8 @@ class Family < ActiveRecord::Base
 
   private
 
-  def Family.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, method: :foo)
+  def Family.initialize_local_rexport_fields(rexport_model)
+    rexport_model.add_rexport_field(:foo_method, method: :foo)
   end
 end
 
