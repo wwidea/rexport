@@ -3,7 +3,7 @@ module Rexport #:nodoc:
     extend ActiveSupport::Concern
 
     module ClassMethods
-      # Returns the associated class by following the associations
+      # Returns the associated class by following the chain of associations
       def get_klass_from_associations(*associations)
         associations.flatten!
         return self if associations.empty?
