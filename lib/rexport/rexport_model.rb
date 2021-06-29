@@ -1,6 +1,6 @@
 module Rexport #:nodoc:
   class RexportModel
-    attr_accessor :klass, :path, :rexport_fields
+    attr_accessor :klass, :path
 
     def initialize(klass, path: nil)
       self.klass = klass
@@ -87,9 +87,16 @@ module Rexport #:nodoc:
 
     protected
 
-    # Returns the associated class by following the associations
-    def get_rexport_model(*associations)
-      associations.empty? ? self : self.class.new(klass.get_klass_from_associations(associations))
+    # Returns a rexport_model for the associated class by following the chain of associations
+    def get_rexport_model(associations)
+      associations.empty? ? self : rexport_models[associations.dup]
+    end
+
+    # Memoize rexport_models to avoid initializing rexport_fields multiple times
+    def rexport_models
+      @rexport_models ||= Hash.new do |hash, key|
+        hash[key] = self.class.new(klass.get_klass_from_associations(key))
+      end
     end
 
     # Returns the export method for a given field_name

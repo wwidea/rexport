@@ -58,7 +58,8 @@ class RexportModel < ActiveSupport::TestCase
 
   test 'should get rexport methods' do
     assert_equal(
-      ['student.family.foo',
+      [
+        'student.family.foo',
         'student.name',
         'undefined_rexport_field',
         'undefined_rexport_field',
@@ -74,6 +75,14 @@ class RexportModel < ActiveSupport::TestCase
         'grade'
       )
     )
+  end
+
+  test 'should use cached rexport_model when getting multiple fields from one model' do
+    rexport_model.tap do |rexport|
+      assert_equal ['student.name'], rexport.get_rexport_methods('student.name')
+      Student.expects(:get_klass_from_associations).times(0)
+      assert_equal ['student.date_of_birth'], rexport.get_rexport_methods('student.date_of_birth')
+    end
   end
 
   test 'should return default foreign_key' do
