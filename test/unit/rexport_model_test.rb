@@ -109,14 +109,20 @@ class RexportModel < ActiveSupport::TestCase
     assert rexport_model.collection_from_association('status')
   end
 
+  test 'should return custom find method for collection_from_association' do
+    Student.expects(:find_family_for_rexport).returns(true)
+    assert rexport_model(model: Student).collection_from_association('family')
+  end
+
+
   test 'should return class name' do
     assert_equal 'Enrollment', rexport_model.name
   end
 
   private
 
-  def rexport_model(path: nil)
-    Rexport::RexportModel.new(Enrollment, path: path)
+  def rexport_model(model: Enrollment, path: nil)
+    Rexport::RexportModel.new(model, path: path)
   end
 
   def data_field(name)

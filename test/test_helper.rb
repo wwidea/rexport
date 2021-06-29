@@ -123,6 +123,10 @@ class Student < ActiveRecord::Base
   include Rexport::DataFields
   belongs_to :family
   has_many :enrollments
+
+  def self.find_family_for_rexport
+    Family.order(:name)
+  end
 end
 
 class Family < ActiveRecord::Base
