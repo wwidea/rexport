@@ -57,6 +57,7 @@ module Rexport #:nodoc:
       model_class_name.constantize
     end
 
+    # Returns a RexportModel for the current export_model
     def rexport_model
       @rexport_model ||= RexportModel.new(export_model)
     end
