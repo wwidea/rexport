@@ -112,10 +112,10 @@ class Enrollment < ActiveRecord::Base
 
   private
 
-  def Enrollment.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, method: :foo)
-    add_rexport_field(:bad_method, method: 'bad_method')
-    add_association_methods(associations: %w(status ilp_status))
+  def self.initialize_local_rexport_fields(rexport_model)
+    rexport_model.add_rexport_field(:foo_method, method: :foo)
+    rexport_model.add_rexport_field(:bad_method, method: 'bad_method')
+    rexport_model.add_association_methods(associations: %w(status ilp_status))
   end
 end
 
@@ -123,6 +123,10 @@ class Student < ActiveRecord::Base
   include Rexport::DataFields
   belongs_to :family
   has_many :enrollments
+
+  def self.find_family_for_rexport
+    Family.order(:name)
+  end
 end
 
 class Family < ActiveRecord::Base
@@ -135,8 +139,8 @@ class Family < ActiveRecord::Base
 
   private
 
-  def Family.initialize_local_rexport_fields
-    add_rexport_field(:foo_method, method: :foo)
+  def self.initialize_local_rexport_fields(rexport_model)
+    rexport_model.add_rexport_field(:foo_method, method: :foo)
   end
 end
 
@@ -158,9 +162,6 @@ class ExportFilter < ActiveRecord::Base
 end
 
 class SelfReferentialCheck < ActiveRecord::Base
+  include Rexport::DataFields
   belongs_to :enrollment
-
-  def SelfReferentialCheck.rexport_fields
-    'trick get_rexport_models into believing we are exportable'
-  end
 end
