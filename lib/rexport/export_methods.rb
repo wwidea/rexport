@@ -198,9 +198,7 @@ module Rexport #:nodoc:
         end
       end
 
-      position = 0
-      rexport_fields.each do |rexport_field|
-        position += 1
+      rexport_fields.each.with_index(1) do |rexport_field, position|
         export_item = export_items.detect { |i| i.rexport_field == rexport_field } || export_items.create(rexport_field: rexport_field)
         export_item.update_attribute(:position, position) if set_position
       end
