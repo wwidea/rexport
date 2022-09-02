@@ -165,9 +165,6 @@ module Rexport #:nodoc:
 
     def build_conditions
       Hash.new.tap do |conditions|
-        # export_filters.select(&:defined?).each do |filter|
-        #   conditions[get_database_field(filter.filter_field)] = filter.value
-        # end
         export_filters.each do |filter|
           conditions[get_database_field(filter.filter_field)] = filter.value
         end
