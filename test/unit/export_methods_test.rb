@@ -42,6 +42,13 @@ class ExportMethodsTest < ActiveSupport::TestCase
     assert_equal [['1', 'active']], create(:filtered_export).records
   end
 
+  test 'should return error message for records when export has an invalid filter' do
+    assert_equal(
+      [["SQLite3::SQLException: no such column: enrollments.invalid_id"]],
+      create(:invalid_filtered_export).records
+    )
+  end
+
   test 'should call get_records' do
     export = build(:export)
     export.expects(:get_records).with(Rexport::SAMPLE_SIZE).returns(true)

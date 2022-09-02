@@ -126,6 +126,8 @@ module Rexport #:nodoc:
 
     def get_records(limit = nil)
       get_export_values(export_model.where(build_conditions).includes(build_include).limit(limit))
+    rescue ActiveRecord::StatementInvalid => e
+      [[e.message]]
     end
 
     def seed_records(objects)
@@ -163,6 +165,9 @@ module Rexport #:nodoc:
 
     def build_conditions
       Hash.new.tap do |conditions|
+        # export_filters.select(&:defined?).each do |filter|
+        #   conditions[get_database_field(filter.filter_field)] = filter.value
+        # end
         export_filters.each do |filter|
           conditions[get_database_field(filter.filter_field)] = filter.value
         end
