@@ -103,7 +103,7 @@ module Rexport
       end
 
       factory :invalid_filter, class: 'ExportFilter' do
-        filter_field   { 'invalid_id' }
+        filter_field   { 'invalid' }
         value          { '1' }
       end
     end
