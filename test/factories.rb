@@ -54,6 +54,21 @@ module Rexport
         end
       end
 
+      factory :invalid_filtered_export, class: 'Export' do
+        name              { 'Invalid Filtered Enrollment Export' }
+        model_class_name  { 'Enrollment' }
+        export_items do |items|
+          %w(grade_export_item status_name_export_item).map do |item|
+            items.association(item)
+          end
+        end
+        export_filters do |filters|
+          %w(invalid_filter).map do |filter|
+            filters.association(filter)
+          end
+        end
+      end
+
       factory :family_name_export_item, class: 'ExportItem' do
         position       { 1 }
         name           { 'Family Name' }
@@ -85,6 +100,11 @@ module Rexport
       factory :status_filter, class: 'ExportFilter' do
         filter_field   { 'status.name' }
         value          { 'active' }
+      end
+
+      factory :invalid_filter, class: 'ExportFilter' do
+        filter_field   { 'invalid' }
+        value          { '1' }
       end
     end
   end
