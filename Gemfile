@@ -10,7 +10,10 @@ group :test do
 end
 
 group :development do
-  gem 'guard'
+  gem 'factory_bot'
   gem 'guard-minitest'
+  gem 'guard'
+  gem 'mocha'
+  gem 'sqlite3'
   gem 'terminal-notifier-guard'
 end
