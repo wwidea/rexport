@@ -99,6 +99,7 @@ GEM
       minitest (>= 3.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    language_server-protocol (3.17.0.3)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -135,6 +136,7 @@ GEM
     notiffany (0.1.3)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    prettier_print (1.2.0)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -172,10 +174,17 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    ruby-lsp (0.3.8)
+      language_server-protocol (~> 3.17.0)
+      sorbet-runtime
+      syntax_tree (>= 5.0.0, < 6)
     ruby2_keywords (0.0.5)
     shellany (0.0.1)
+    sorbet-runtime (0.5.10634)
     sqlite3 (1.6.0)
       mini_portile2 (~> 2.8.0)
+    syntax_tree (5.3.0)
+      prettier_print (>= 1.2.0)
     terminal-notifier-guard (1.7.0)
     thor (1.2.1)
     timeout (0.3.1)
@@ -195,6 +204,7 @@ DEPENDENCIES
   guard-minitest
   mocha
   rexport!
+  ruby-lsp
   sqlite3
   terminal-notifier-guard
 
