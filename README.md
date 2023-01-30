@@ -1,7 +1,7 @@
-#Rexport
+# Rexport
 Ruby on Rails gem to manage exports
 
-##Installation
+## Installation
 1. install gem
 2. copy migration into application db/migrate folder and run
 3. create models and mix in corresponding module
