@@ -2,7 +2,6 @@ require "rails"
 require "active_record"
 require "rexport"
 
-require "minitest/autorun"
 require "factory_bot"
 require "mocha/minitest"
 require File.expand_path("../test/factories", __dir__)
