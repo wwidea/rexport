@@ -1,20 +1,23 @@
-$:.push File.expand_path("../lib", __FILE__)
+require_relative "lib/rexport/version"
 
-# Maintain your gem's version:
-require "rexport/version"
+Gem::Specification.new do |spec|
+  spec.name        = "rexport"
+  spec.version     = Rexport::VERSION
+  spec.authors     = ["Aaron Baldwin", "Brightways Learning"]
+  spec.email       = ["baldwina@brightwayslearning.org"]
+  spec.homepage    = "https://github.com/wwidea/rexport"
+  spec.summary     = "Ruby on Rails gem to manage exports."
+  spec.description = "Rexport integrates into a Rails application making model data available for export into CSV files."
+  spec.license     = "MIT"
 
-Gem::Specification.new do |s|
-  s.name = 'rexport'
-  s.version = Rexport::VERSION
-  s.authors = ['Aaron Baldwin', 'Brightways Learning']
-  s.email = ["developers@brightwayslearning.org"]
-  s.homepage = 'https://github.com/wwidea/rexport'
-  s.summary = 'Ruby on Rails gem to manage exports.'
-  s.description = 'Rexport integrates into a Rails application making model data available for export into CSV files.'
-  s.license     = 'MIT'
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["rubygems_mfa_required"] = "true"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["test/**/*"]
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  end
 
-  s.add_dependency 'rails', '>= 6.0.3'
+  spec.required_ruby_version = ">= 2.7.0"
+  spec.add_runtime_dependency "rails", ">= 6.0.3"
 end
