@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rexport (1.2.1)
+    rexport (1.3.0)
       rails (>= 6.0.3)
 
 GEM
