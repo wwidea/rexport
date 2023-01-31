@@ -185,7 +185,6 @@ GEM
       mini_portile2 (~> 2.8.0)
     syntax_tree (5.3.0)
       prettier_print (>= 1.2.0)
-    terminal-notifier-guard (1.7.0)
     thor (1.2.1)
     timeout (0.3.1)
     tzinfo (2.0.6)
@@ -206,7 +205,6 @@ DEPENDENCIES
   rexport!
   ruby-lsp
   sqlite3
-  terminal-notifier-guard
 
 BUNDLED WITH
    2.4.5
