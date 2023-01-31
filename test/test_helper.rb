@@ -1,17 +1,10 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/test/'
-end
-
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "rails"
-require 'active_record'
+require "active_record"
 require "rexport"
 
-require 'minitest/autorun'
-require 'factory_bot'
-require 'mocha/minitest'
-require File.dirname(__FILE__) + '/factories'
+require "factory_bot"
+require "mocha/minitest"
+require File.expand_path("../test/factories", __dir__)
 
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
