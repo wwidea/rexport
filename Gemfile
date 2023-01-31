@@ -10,4 +10,3 @@ gem "guard"
 gem "mocha"
 gem "ruby-lsp"
 gem "sqlite3"
-
