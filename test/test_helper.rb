@@ -128,14 +128,12 @@ class Family < ActiveRecord::Base
   include Rexport::DataFields
   has_many :students
 
-  def foo
-    "bar"
-  end
-
-  private
-
   def self.initialize_local_rexport_fields(rexport_model)
     rexport_model.add_rexport_field(:foo_method, method: :foo)
+  end
+
+  def foo
+    "bar"
   end
 end
 
