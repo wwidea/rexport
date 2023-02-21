@@ -87,14 +87,13 @@ class ActiveSupport::TestCase
   end
 end
 
-class ActiveRecord::Base
-  class << self
-    def acts_as_list(options = {})
-    end
-  end
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+
+  def self.acts_as_list(_options = {}); end
 end
 
-class Enrollment < ActiveRecord::Base
+class Enrollment < ApplicationRecord
   include Rexport::DataFields
   belongs_to :student
   belongs_to :status
@@ -114,7 +113,7 @@ class Enrollment < ActiveRecord::Base
   end
 end
 
-class Student < ActiveRecord::Base
+class Student < ApplicationRecord
   include Rexport::DataFields
   belongs_to :family
   has_many :enrollments
@@ -124,7 +123,7 @@ class Student < ActiveRecord::Base
   end
 end
 
-class Family < ActiveRecord::Base
+class Family < ApplicationRecord
   include Rexport::DataFields
   has_many :students
 
@@ -137,24 +136,24 @@ class Family < ActiveRecord::Base
   end
 end
 
-class Status < ActiveRecord::Base
+class Status < ApplicationRecord
   # does not include Rexport
   has_many :enrollments
 end
 
-class Export < ActiveRecord::Base
+class Export < ApplicationRecord
   include Rexport::ExportMethods
 end
 
-class ExportItem < ActiveRecord::Base
+class ExportItem < ApplicationRecord
   include Rexport::ExportItemMethods
 end
 
-class ExportFilter < ActiveRecord::Base
+class ExportFilter < ApplicationRecord
   include Rexport::ExportFilterMethods
 end
 
-class SelfReferentialCheck < ActiveRecord::Base
+class SelfReferentialCheck < ApplicationRecord
   include Rexport::DataFields
   belongs_to :enrollment
 end
