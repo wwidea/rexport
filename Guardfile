@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 guard :shell do
-  directories %w(lib test)
+  directories %w[lib test]
 
   # lib directory
   watch(%r{^lib/(.+)\.rb$}) { |m| "test/lib/#{m[1]}_test.rb" }

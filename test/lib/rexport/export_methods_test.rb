@@ -17,14 +17,14 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should return rexport_fields" do
     assert_equal(
-      %w(student.family.name grade status_name bogus_field),
+      %w[student.family.name grade status_name bogus_field],
       build(:export).send(:rexport_fields)
     )
   end
 
   test "should return rexport_methods" do
     assert_equal(
-      %w(student.family.name grade status.name undefined_rexport_field),
+      %w[student.family.name grade status.name undefined_rexport_field],
       create(:export).send(:rexport_methods)
     )
   end
@@ -102,7 +102,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
   test "should return rexport_models" do
     export = create(:export)
     assert_equal(
-      %w(Enrollment Family SelfReferentialCheck Student),
+      %w[Enrollment Family SelfReferentialCheck Student],
       export.rexport_models.map(&:name).sort
     )
     assert_equal(
@@ -120,47 +120,47 @@ class ExportMethodsTest < ActiveSupport::TestCase
   end
 
   test "should save export_items from a hash" do
-    assert_equal %w(a b c), rexport_fields_for(create_export(fields: { a: 1, b: 1, c: 1 }))
+    assert_equal %w[a b c], rexport_fields_for(create_export(fields: { a: 1, b: 1, c: 1 }))
   end
 
   test "should save export_items from an array" do
-    assert_equal %w(a b c), rexport_fields_for(create_export(fields: %w(a b c)))
+    assert_equal %w[a b c], rexport_fields_for(create_export(fields: %w[a b c]))
   end
 
   test "should add export_item to exising export on update" do
-    export = create_export(fields: %w(a c))
+    export = create_export(fields: %w[a c])
     assert_difference "ExportItem.count" do
-      export.update_attribute(:rexport_fields, %w(a b c))
+      export.update_attribute(:rexport_fields, %w[a b c])
     end
-    assert_equal %w(a b c), rexport_fields_for(export)
+    assert_equal %w[a b c], rexport_fields_for(export)
   end
 
   test "should delete export_item that is not in rexport_fields on update" do
-    export = create_export(fields: %w(a b c))
+    export = create_export(fields: %w[a b c])
     assert_difference "ExportItem.count", -1 do
-      export.update_attribute(:rexport_fields, %w(a c))
+      export.update_attribute(:rexport_fields, %w[a c])
     end
-    assert_equal %w(a c), rexport_fields_for(export)
+    assert_equal %w[a c], rexport_fields_for(export)
   end
 
   test "should re-order export_items when passed an array of export_fields on update" do
-    export = create_export(fields: %w(a b c))
-    export.update_attribute(:rexport_fields, %w(c b a))
-    assert_equal %w(c b a), rexport_fields_for(export)
+    export = create_export(fields: %w[a b c])
+    export.update_attribute(:rexport_fields, %w[c b a])
+    assert_equal %w[c b a], rexport_fields_for(export)
   end
 
   test "should not re-order export_items when passed a hash of export_fields on update" do
-    export = create_export(fields: %w(a b c))
+    export = create_export(fields: %w[a b c])
     export.update_attribute(:rexport_fields, { c: 1, b: 1, a: 1 })
-    assert_equal %w(a b c), rexport_fields_for(export)
+    assert_equal %w[a b c], rexport_fields_for(export)
   end
 
   test "should not modify export_items on update when no export_fields are passed" do
-    export = create_export(fields: %w(a b c))
+    export = create_export(fields: %w[a b c])
     assert_no_difference "ExportItem.count" do
       export.update_attribute(:name, "New Name")
     end
-    assert_equal %w(a b c), rexport_fields_for(export)
+    assert_equal %w[a b c], rexport_fields_for(export)
   end
 
   test "should create export with an export_filter" do

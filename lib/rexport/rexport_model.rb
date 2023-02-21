@@ -57,7 +57,7 @@ module Rexport #:nodoc:
     #   :filter - if true will send type: :association to add_report_field
     def add_association_methods(options = {})
       options.stringify_keys!
-      options.assert_valid_keys(%w(associations methods filter))
+      options.assert_valid_keys(%w[associations methods filter])
 
       methods = options.reverse_merge("methods" => "name")["methods"]
       methods = [methods] if methods.kind_of?(String)

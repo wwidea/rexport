@@ -35,7 +35,7 @@ module Rexport
         name              { "Enrollment Export" }
         model_class_name  { "Enrollment" }
         export_items do |items|
-          %w(family_name_export_item grade_export_item status_name_export_item bogus_export_item).map do |item|
+          %w[family_name_export_item grade_export_item status_name_export_item bogus_export_item].map do |item|
             items.association(item)
           end
         end
@@ -45,12 +45,12 @@ module Rexport
         name              { "Filtered Enrollment Export" }
         model_class_name  { "Enrollment" }
         export_items do |items|
-          %w(grade_export_item status_name_export_item).map do |item|
+          %w[grade_export_item status_name_export_item].map do |item|
             items.association(item)
           end
         end
         export_filters do |filters|
-          %w(grade_filter status_filter).map do |filter|
+          %w[grade_filter status_filter].map do |filter|
             filters.association(filter)
           end
         end
@@ -60,12 +60,12 @@ module Rexport
         name              { "Invalid Filtered Enrollment Export" }
         model_class_name  { "Enrollment" }
         export_items do |items|
-          %w(grade_export_item status_name_export_item).map do |item|
+          %w[grade_export_item status_name_export_item].map do |item|
             items.association(item)
           end
         end
         export_filters do |filters|
-          %w(invalid_filter).map do |filter|
+          %w[invalid_filter].map do |filter|
             filters.association(filter)
           end
         end

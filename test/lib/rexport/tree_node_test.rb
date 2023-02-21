@@ -10,7 +10,7 @@ class TreeNodeTest < ActiveSupport::TestCase
   end
 
   test "should initialize with name and children" do
-    t = Rexport::TreeNode.new("test", %w(one two three))
+    t = Rexport::TreeNode.new("test", %w[one two three])
     assert_equal "test", t.name
     assert_equal ["test", [["one", [["two", [["three", []]]]]]]], t.to_a
   end
@@ -32,12 +32,12 @@ class TreeNodeTest < ActiveSupport::TestCase
 
   test "should return single level array include" do
     root = Rexport::TreeNode.new("root")
-    %w(a b c).each { |l| root.add_child(l) }
+    %w[a b c].each { |l| root.add_child(l) }
     assert_equal [:a, :b, :c], root.to_include
   end
 
   test "should return nested hash include" do
-    root = Rexport::TreeNode.new("root", %w(a b c))
+    root = Rexport::TreeNode.new("root", %w[a b c])
     assert_equal [{ a: [{ b: [:c] }] }], root.to_include
     root.add_child "b", "one", "two"
     assert_equal [{ a: [{ b: [:c] }] }, { b: [{ one:[:two] }] }], root.to_include

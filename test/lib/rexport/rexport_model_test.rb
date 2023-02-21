@@ -5,7 +5,7 @@ require "test_helper"
 class RexportModel < ActiveSupport::TestCase
   test "should initialize rexport_fields" do
     assert_equal(
-      %w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at),
+      %w[active bad_method created_at foo_method grade ilp_status_name status_name updated_at],
       rexport_model.rexport_fields.keys.sort
     )
   end
@@ -30,13 +30,13 @@ class RexportModel < ActiveSupport::TestCase
 
   test "should add name methods for multiple associations" do
     assert_fields_length(change: 3) do |rexport|
-      rexport.add_association_methods(associations: %w(a b c))
+      rexport.add_association_methods(associations: %w[a b c])
     end
   end
 
   test "should add multiple methods for multiple associations" do
     assert_fields_length(change: 9) do |rexport|
-      rexport.add_association_methods(associations: %w(a1 a2 a3), methods: %w(m1 m2 m3))
+      rexport.add_association_methods(associations: %w[a1 a2 a3], methods: %w[m1 m2 m3])
     end
   end
 
@@ -49,7 +49,7 @@ class RexportModel < ActiveSupport::TestCase
   end
 
   test "should remove multiple rexport fields" do
-    fields = %w(grade status_name foo_method)
+    fields = %w[grade status_name foo_method]
 
     rexport_model.tap do |rexport|
       fields.each { |field| assert(rexport.rexport_fields[field]) }
@@ -97,7 +97,7 @@ class RexportModel < ActiveSupport::TestCase
 
   test "should call rexport_fields_array" do
     assert_equal(
-      %w(active bad_method created_at foo_method grade ilp_status_name status_name updated_at),
+      %w[active bad_method created_at foo_method grade ilp_status_name status_name updated_at],
       rexport_model.rexport_fields_array.map(&:name)
     )
   end

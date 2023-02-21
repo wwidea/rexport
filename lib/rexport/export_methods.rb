@@ -20,7 +20,7 @@ module Rexport #:nodoc:
 
     module ClassMethods
       def models
-        %w(override_this_method)
+        %w[override_this_method]
       end
     end
 
@@ -152,7 +152,7 @@ module Rexport #:nodoc:
     end
 
     def get_associations(model)
-      %i(belongs_to has_one).map do |type|
+      %i[belongs_to has_one].map do |type|
         model.reflect_on_all_associations(type)
       end.flatten.reject(&:polymorphic?)
     end

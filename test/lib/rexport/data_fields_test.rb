@@ -18,11 +18,11 @@ class DataFieldsTest < ActiveSupport::TestCase
 
   class RexportInstanceMethodsTest < DataFieldsTest
     test "should exoport value of data attribute" do
-      assert_equal %w(1), build(:enrollment).export("grade")
+      assert_equal %w[1], build(:enrollment).export("grade")
     end
 
     test "should export value returned from method" do
-      assert_equal %w(bar), build(:enrollment).export("foo")
+      assert_equal %w[bar], build(:enrollment).export("foo")
     end
 
     test "should return empty string for undefined method" do
@@ -34,11 +34,11 @@ class DataFieldsTest < ActiveSupport::TestCase
     end
 
     test "should export Y for true" do
-      assert_equal %w(Y), Enrollment.new(active: true).export("active")
+      assert_equal %w[Y], Enrollment.new(active: true).export("active")
     end
 
     test "should export N for false" do
-      assert_equal %w(N), Enrollment.new(active: false).export("active")
+      assert_equal %w[N], Enrollment.new(active: false).export("active")
     end
 
     test "should handle missing associations" do
@@ -54,11 +54,11 @@ class DataFieldsTest < ActiveSupport::TestCase
     end
 
     test "should export value returned from associated method" do
-      assert_equal %w(bar), build(:enrollment).export("student.family.foo")
+      assert_equal %w[bar], build(:enrollment).export("student.family.foo")
     end
 
     test "should export field from non rexported model" do
-      assert_equal %w(active), build(:enrollment).export("status.name")
+      assert_equal %w[active], build(:enrollment).export("status.name")
     end
 
     test "should export local, associated, and non rexported fields in order" do
