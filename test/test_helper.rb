@@ -16,7 +16,7 @@ module ActiveSupport
     include Rexport::Factories
 
     def setup
-      suppress_output { setup_db }
+      ActiveRecord::Migration.suppress_messages { setup_db }
       Enrollment.instance_variable_set(:@rexport_fields, nil)
       Student.instance_variable_set(:@rexport_fields, nil)
     end
@@ -77,14 +77,6 @@ module ActiveSupport
       ActiveRecord::Base.connection.data_sources.each do |table|
         ActiveRecord::Base.connection.drop_table(table)
       end
-    end
-
-    def suppress_output
-      original_stdout = $stdout.clone
-      $stdout.reopen File.new("/dev/null", "w")
-      yield
-    ensure
-      $stdout.reopen original_stdout
     end
   end
 end
