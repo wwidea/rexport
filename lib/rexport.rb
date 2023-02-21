@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rexport/data_field'
 require 'rexport/data_fields'
 require 'rexport/export_filter_methods'

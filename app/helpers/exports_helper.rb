@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExportsHelper
   def filter_value_field(rexport_model, field)
     filter_field = rexport_model.field_path(rexport_model.filter_column(field))

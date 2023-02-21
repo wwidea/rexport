@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rexport
   module ExportItemsControllerMethods
     def edit

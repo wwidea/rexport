@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rexport #:nodoc:
   module ExportFilterMethods
     extend ActiveSupport::Concern

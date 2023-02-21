@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 guard :shell do
   directories %w(lib test)
 
