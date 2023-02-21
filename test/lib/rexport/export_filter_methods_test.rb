@@ -13,6 +13,7 @@ class ExportFilterMethodsTest < ActiveSupport::TestCase
 
   test "should return chained associated object" do
     family = FactoryBot.create(:family)
+
     assert_equal(
       family.name,
       export_filter("student.family_id", value: family.id).display_value

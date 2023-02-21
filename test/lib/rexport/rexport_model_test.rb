@@ -23,6 +23,7 @@ class RexportModel < ActiveSupport::TestCase
   test "should add single association method to rexport_fields" do
     assert_fields_length do |rexport|
       rexport.add_association_methods(associations: "test_association")
+
       assert_equal "test_association_name", rexport.rexport_fields[:test_association_name].name
       assert_equal "test_association.name", rexport.rexport_fields[:test_association_name].method
     end
@@ -83,6 +84,7 @@ class RexportModel < ActiveSupport::TestCase
     rexport_model.tap do |rexport|
       assert_equal ["student.name"], rexport.get_rexport_methods("student.name")
       Student.expects(:get_klass_from_associations).times(0)
+
       assert_equal ["student.date_of_birth"], rexport.get_rexport_methods("student.date_of_birth")
     end
   end
@@ -108,11 +110,13 @@ class RexportModel < ActiveSupport::TestCase
 
   test "should return collection_from_association" do
     Status.expects(:all).returns(true)
+
     assert rexport_model.collection_from_association("status")
   end
 
   test "should return custom find method for collection_from_association" do
     Student.expects(:find_family_for_rexport).returns(true)
+
     assert rexport_model(model: Student).collection_from_association("family")
   end
 

@@ -31,6 +31,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should return records" do
     create(:enrollment)
+
     assert_equal(
       ["The Sample Family", "1", "active", "UNDEFINED EXPORT FIELD"],
       create(:export).records.first
@@ -40,6 +41,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
   test "should return records that match filters" do
     create(:enrollment)
     create(:second_grade_enrollment)
+
     assert_equal 2, Enrollment.count
     assert_equal [["1", "active"]], create(:filtered_export).records
   end
@@ -54,6 +56,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
   test "should call get_records" do
     export = build(:export)
     export.expects(:get_records).with(Rexport::SAMPLE_SIZE).returns(true)
+
     assert export.sample_records
   end
 
@@ -63,6 +66,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should return to_s with record" do
     create(:enrollment)
+
     assert_equal(
       "Family Name|Grade|Status|Bogus Item\nThe Sample Family|1|active|UNDEFINED EXPORT FIELD\n",
       create(:export).to_s
@@ -75,6 +79,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should return to_csv with record" do
     FactoryBot.create(:enrollment)
+
     assert_equal(
       "Family Name,Grade,Status,Bogus Item\nThe Sample Family,1,active,UNDEFINED EXPORT FIELD\n",
       create(:export).to_csv
@@ -101,6 +106,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should return rexport_models" do
     export = create(:export)
+
     assert_equal(
       %w[Enrollment Family SelfReferentialCheck Student],
       export.rexport_models.map(&:name).sort
@@ -146,12 +152,14 @@ class ExportMethodsTest < ActiveSupport::TestCase
   test "should re-order export_items when passed an array of export_fields on update" do
     export = create_export(fields: %w[a b c])
     export.update_attribute(:rexport_fields, %w[c b a])
+
     assert_equal %w[c b a], rexport_fields_for(export)
   end
 
   test "should not re-order export_items when passed a hash of export_fields on update" do
     export = create_export(fields: %w[a b c])
     export.update_attribute(:rexport_fields, { c: 1, b: 1, a: 1 })
+
     assert_equal %w[a b c], rexport_fields_for(export)
   end
 

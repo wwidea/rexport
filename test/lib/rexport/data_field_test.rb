@@ -22,6 +22,7 @@ class DataFieldTest < ActiveSupport::TestCase
   test "should_sort_data_fields" do
     a = Rexport::DataField.new(:a)
     b = Rexport::DataField.new(:b)
+
     assert_equal [a,b], [b,a].sort
   end
 end
