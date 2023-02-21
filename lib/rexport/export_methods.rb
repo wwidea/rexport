@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
 module Rexport #:nodoc:
   module ExportMethods
@@ -31,9 +31,9 @@ module Rexport #:nodoc:
     # Returns a string with the export data
     def to_s
       String.new.tap do |result|
-        result << header * '|' << "\n"
+        result << header * "|" << "\n"
         records.each do |record|
-          result << record * '|' << "\n"
+          result << record * "|" << "\n"
         end
       end
     end
@@ -146,7 +146,7 @@ module Rexport #:nodoc:
       get_associations(model).each do |associated_model|
         # prevent infinite loop by checking if this class is already in the results set
         next if results.detect { |result| result.klass == associated_model.klass }
-        get_rexport_models(associated_model.klass, results, [path, associated_model.name].compact * '.')
+        get_rexport_models(associated_model.klass, results, [path, associated_model.name].compact * ".")
       end
       return results
     end
@@ -158,9 +158,9 @@ module Rexport #:nodoc:
     end
 
     def build_include
-      root = Rexport::TreeNode.new('root')
-      (rexport_methods + filter_fields).select {|m| m.include?('.')}.each do |method|
-        root.add_child(method.split('.').values_at(0..-2))
+      root = Rexport::TreeNode.new("root")
+      (rexport_methods + filter_fields).select {|m| m.include?(".")}.each do |method|
+        root.add_child(method.split(".").values_at(0..-2))
       end
       root.to_include
     end
@@ -174,7 +174,7 @@ module Rexport #:nodoc:
     end
 
     def get_database_field(field)
-      path = field.split('.')
+      path = field.split(".")
       field = path.pop
       "#{get_klass_from_path(path).table_name}.#{field}"
     end
@@ -211,7 +211,7 @@ module Rexport #:nodoc:
     end
 
     def attributes_for_copy
-      attributes.slice('model_class_name', 'description').merge(name: find_unique_name(name))
+      attributes.slice("model_class_name", "description").merge(name: find_unique_name(name))
     end
 
     def find_unique_name(original_name, suffix = 0)

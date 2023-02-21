@@ -14,18 +14,18 @@ module Rexport #:nodoc:
     end
 
     def attributes_for_copy
-      attributes.slice('filter_field', 'value')
+      attributes.slice("filter_field", "value")
     end
 
     private
 
     def associated_object_value
-      return 'UNDEFINED ASSOCIATION' unless filter_association
+      return "UNDEFINED ASSOCIATION" unless filter_association
       begin
         object = filter_association.klass.find(value)
         return object.respond_to?(:name) ? object.name : object.to_s
       rescue ActiveRecord::RecordNotFound
-        return 'ASSOCIATED OBJECT NOT FOUND'
+        return "ASSOCIATED OBJECT NOT FOUND"
       end
     end
 
@@ -44,11 +44,11 @@ module Rexport #:nodoc:
     end
 
     def filter_path
-      filter_field.split('.')[0..-2]
+      filter_field.split(".")[0..-2]
     end
 
     def filter_foreign_key
-      filter_field.split('.').last
+      filter_field.split(".").last
     end
 
     def filter_on_associated_object?

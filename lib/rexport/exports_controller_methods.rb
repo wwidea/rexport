@@ -27,7 +27,7 @@ module Rexport
       @export = params[:original_export_id] ? Export.find(params[:original_export_id]).copy : Export.new(export_params)
 
       if @export.save
-        redirect_to @export, notice: 'Export was successfully created.'
+        redirect_to @export, notice: "Export was successfully created."
       else
         render :new
       end
@@ -35,7 +35,7 @@ module Rexport
 
     def update
       if export.update(export_params)
-        redirect_to export, notice: 'Export was successfully updated.'
+        redirect_to export, notice: "Export was successfully updated."
       else
         render :edit
       end
@@ -68,7 +68,7 @@ module Rexport
     end
 
     def export_content_type
-      request.user_agent =~ /windows/i ? 'application/vnd.ms-excel' : 'text/csv'
+      request.user_agent =~ /windows/i ? "application/vnd.ms-excel" : "text/csv"
     end
 
     def filename

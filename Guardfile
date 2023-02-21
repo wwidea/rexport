@@ -10,7 +10,7 @@ guard :shell do
   watch(%r{^test/.+_test\.rb$})
 
   # test_helper
-  watch(%r{^test/test_helper\.rb$}) { 'test' }
+  watch(%r{^test/test_helper\.rb$}) { "test" }
 end
 
 class Guard::Shell

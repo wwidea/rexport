@@ -20,9 +20,9 @@ module Rexport #:nodoc:
           when Date, Time
             value.strftime("%m/%d/%y")
           when TrueClass
-            'Y'
+            "Y"
           when FalseClass
-            'N'
+            "N"
           else value.to_s
         end
       end
@@ -30,7 +30,7 @@ module Rexport #:nodoc:
 
     # Returns string indicating this field is undefined
     def undefined_rexport_field
-      'UNDEFINED EXPORT FIELD'
+      "UNDEFINED EXPORT FIELD"
     end
   end
 end

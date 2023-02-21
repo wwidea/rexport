@@ -16,8 +16,8 @@ class ActiveSupport::TestCase
 
   def setup
     suppress_output { setup_db }
-    Enrollment.instance_variable_set('@rexport_fields', nil)
-    Student.instance_variable_set('@rexport_fields', nil)
+    Enrollment.instance_variable_set("@rexport_fields", nil)
+    Student.instance_variable_set("@rexport_fields", nil)
   end
 
   def teardown
@@ -80,7 +80,7 @@ class ActiveSupport::TestCase
 
   def suppress_output
     original_stdout = $stdout.clone
-    $stdout.reopen File.new('/dev/null', 'w')
+    $stdout.reopen File.new("/dev/null", "w")
     yield
   ensure
     $stdout.reopen original_stdout
@@ -98,18 +98,18 @@ class Enrollment < ActiveRecord::Base
   include Rexport::DataFields
   belongs_to :student
   belongs_to :status
-  belongs_to :ilp_status, class_name: 'Status', foreign_key: 'ilp_status_id'
+  belongs_to :ilp_status, class_name: "Status", foreign_key: "ilp_status_id"
   belongs_to :self_referential_check
 
   def foo
-    'bar'
+    "bar"
   end
 
   private
 
   def self.initialize_local_rexport_fields(rexport_model)
     rexport_model.add_rexport_field(:foo_method, method: :foo)
-    rexport_model.add_rexport_field(:bad_method, method: 'bad_method')
+    rexport_model.add_rexport_field(:bad_method, method: "bad_method")
     rexport_model.add_association_methods(associations: %w(status ilp_status))
   end
 end
@@ -129,7 +129,7 @@ class Family < ActiveRecord::Base
   has_many :students
 
   def foo
-    'bar'
+    "bar"
   end
 
   private

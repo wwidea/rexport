@@ -19,7 +19,7 @@ module Rexport #:nodoc:
     end
 
     def field_path(field_name)
-      [path, field_name].compact * '.'
+      [path, field_name].compact * "."
     end
 
     def collection_from_association(association)
@@ -31,8 +31,8 @@ module Rexport #:nodoc:
     end
 
     def filter_column(field)
-      return field.method unless field.method.include?('.')
-      association = field.method.split('.').first
+      return field.method unless field.method.include?(".")
+      association = field.method.split(".").first
       klass.reflect_on_association(association.to_sym).foreign_key
     end
 
@@ -59,13 +59,13 @@ module Rexport #:nodoc:
       options.stringify_keys!
       options.assert_valid_keys(%w(associations methods filter))
 
-      methods = options.reverse_merge('methods' => 'name')['methods']
+      methods = options.reverse_merge("methods" => "name")["methods"]
       methods = [methods] if methods.kind_of?(String)
 
-      associations = options['associations']
+      associations = options["associations"]
       associations = [associations] if associations.kind_of?(String)
 
-      type = options['filter'] ? :association : nil
+      type = options["filter"] ? :association : nil
 
       associations.each do |association|
         methods.each do |method|
@@ -78,11 +78,11 @@ module Rexport #:nodoc:
     def get_rexport_methods(*field_names)
       field_names.flatten.map do |f|
         begin
-          components = f.to_s.split('.')
+          components = f.to_s.split(".")
           field_name = components.pop
-          components.push(get_rexport_model(components).get_rexport_method(field_name)) * '.'
+          components.push(get_rexport_model(components).get_rexport_method(field_name)) * "."
         rescue NoMethodError
-          'undefined_rexport_field'
+          "undefined_rexport_field"
         end
       end
     end
