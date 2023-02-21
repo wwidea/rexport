@@ -120,7 +120,6 @@ class RexportModel < ActiveSupport::TestCase
     assert rexport_model(model: Student).collection_from_association("family")
   end
 
-
   test "should return class name" do
     assert_equal "Enrollment", rexport_model.name
   end
