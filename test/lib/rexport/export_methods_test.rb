@@ -90,13 +90,13 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should return build_conditions" do
     assert_equal(
-      {"statuses.name" => "active", "enrollments.grade" => "1"},
+      { "statuses.name" => "active", "enrollments.grade" => "1" },
       create(:filtered_export).send(:build_conditions)
     )
   end
 
   test "should return build_include" do
-    assert_equal [{student: [:family]}, :status], create(:export).send(:build_include)
+    assert_equal [{ student: [:family] }, :status], create(:export).send(:build_include)
   end
 
   test "should return rexport_models" do
@@ -120,7 +120,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
   end
 
   test "should save export_items from a hash" do
-    assert_equal %w(a b c), rexport_fields_for(create_export(fields: {a: 1, b: 1, c: 1}))
+    assert_equal %w(a b c), rexport_fields_for(create_export(fields: { a: 1, b: 1, c: 1 }))
   end
 
   test "should save export_items from an array" do
@@ -151,7 +151,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should not re-order export_items when passed a hash of export_fields on update" do
     export = create_export(fields: %w(a b c))
-    export.update_attribute(:rexport_fields, {c: 1, b: 1, a: 1})
+    export.update_attribute(:rexport_fields, { c: 1, b: 1, a: 1 })
     assert_equal %w(a b c), rexport_fields_for(export)
   end
 
@@ -165,21 +165,21 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should create export with an export_filter" do
     assert_difference "ExportFilter.count" do
-      create_export(filters: {status_id: 1})
+      create_export(filters: { status_id: 1 })
     end
   end
 
   test "should add an export_filter to an existing export" do
     export = create_export
     assert_difference "ExportFilter.count" do
-      export.update_attribute(:export_filter_attributes, {status_id: 1})
+      export.update_attribute(:export_filter_attributes, { status_id: 1 })
     end
   end
 
   test "should delete an export_filter from an export" do
-    export = create_export(filters: {status_id: 1})
+    export = create_export(filters: { status_id: 1 })
     assert_difference "ExportFilter.count", -1 do
-      export.update_attribute(:export_filter_attributes, {status_id: ""})
+      export.update_attribute(:export_filter_attributes, { status_id: "" })
     end
   end
 
