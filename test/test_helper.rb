@@ -10,80 +10,82 @@ require File.expand_path("../test/factories", __dir__)
 
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
-class ActiveSupport::TestCase
-  include FactoryBot::Syntax::Methods
-  include Rexport::Factories
+module ActiveSupport
+  class TestCase
+    include FactoryBot::Syntax::Methods
+    include Rexport::Factories
 
-  def setup
-    suppress_output { setup_db }
-    Enrollment.instance_variable_set(:@rexport_fields, nil)
-    Student.instance_variable_set(:@rexport_fields, nil)
-  end
+    def setup
+      suppress_output { setup_db }
+      Enrollment.instance_variable_set(:@rexport_fields, nil)
+      Student.instance_variable_set(:@rexport_fields, nil)
+    end
 
-  def teardown
-    teardown_db
-  end
+    def teardown
+      teardown_db
+    end
 
-  private
+    private
 
-  def setup_db
-    ActiveRecord::Schema.define(version: 1) do
-      create_table :enrollments do |t|
-        t.integer :student_id, :status_id, :grade
-        t.boolean :active
-        t.timestamps
-      end
+    def setup_db # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      ActiveRecord::Schema.define(version: 1) do # rubocop:disable Metrics/BlockLength
+        create_table :enrollments do |t|
+          t.integer :student_id, :status_id, :grade
+          t.boolean :active
+          t.timestamps
+        end
 
-      create_table :students do |t|
-        t.integer :family_id
-        t.string :name
-        t.date :date_of_birth
-        t.timestamps
-      end
+        create_table :students do |t|
+          t.integer :family_id
+          t.string :name
+          t.date :date_of_birth
+          t.timestamps
+        end
 
-      create_table :families do |t|
-        t.string :name
-        t.timestamps
-      end
+        create_table :families do |t|
+          t.string :name
+          t.timestamps
+        end
 
-      create_table :statuses do |t|
-        t.string :name
-      end
+        create_table :statuses do |t|
+          t.string :name
+        end
 
-      create_table :exports do |t|
-        t.string :name
-        t.string :model_class_name
-        t.text :description
-      end
+        create_table :exports do |t|
+          t.string :name
+          t.string :model_class_name
+          t.text :description
+        end
 
-      create_table :export_items do |t|
-        t.integer :export_id
-        t.string :name, :rexport_field
-        t.integer :position
-      end
+        create_table :export_items do |t|
+          t.integer :export_id
+          t.string :name, :rexport_field
+          t.integer :position
+        end
 
-      create_table :export_filters do |t|
-        t.integer :export_id
-        t.string :filter_field, :value
-      end
+        create_table :export_filters do |t|
+          t.integer :export_id
+          t.string :filter_field, :value
+        end
 
-      create_table :self_referential_checks do |t|
+        create_table :self_referential_checks do |t| # rubocop:disable Lint/EmptyBlock
+        end
       end
     end
-  end
 
-  def teardown_db
-    ActiveRecord::Base.connection.data_sources.each do |table|
-      ActiveRecord::Base.connection.drop_table(table)
+    def teardown_db
+      ActiveRecord::Base.connection.data_sources.each do |table|
+        ActiveRecord::Base.connection.drop_table(table)
+      end
     end
-  end
 
-  def suppress_output
-    original_stdout = $stdout.clone
-    $stdout.reopen File.new("/dev/null", "w")
-    yield
-  ensure
-    $stdout.reopen original_stdout
+    def suppress_output
+      original_stdout = $stdout.clone
+      $stdout.reopen File.new("/dev/null", "w")
+      yield
+    ensure
+      $stdout.reopen original_stdout
+    end
   end
 end
 
