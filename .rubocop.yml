@@ -1,0 +1,32 @@
+# https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
+
+require:
+  - rubocop-minitest
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
+
+
+# Layout
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Layout/LineLength:
+  Max: 200
+
+
+# Style
+Style/ClassAndModuleChildren:
+  Exclude:
+    - Guardfile
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
