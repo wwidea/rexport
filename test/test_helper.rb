@@ -16,8 +16,8 @@ class ActiveSupport::TestCase
 
   def setup
     suppress_output { setup_db }
-    Enrollment.instance_variable_set("@rexport_fields", nil)
-    Student.instance_variable_set("@rexport_fields", nil)
+    Enrollment.instance_variable_set(:@rexport_fields, nil)
+    Student.instance_variable_set(:@rexport_fields, nil)
   end
 
   def teardown
