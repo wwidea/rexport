@@ -94,16 +94,14 @@ class Enrollment < ApplicationRecord
   belongs_to :ilp_status, class_name: "Status"
   belongs_to :self_referential_check
 
-  def foo
-    "bar"
-  end
-
-  private
-
   def self.initialize_local_rexport_fields(rexport_model)
     rexport_model.add_rexport_field(:foo_method, method: :foo)
     rexport_model.add_rexport_field(:bad_method, method: "bad_method")
     rexport_model.add_association_methods(associations: %w[status ilp_status])
+  end
+
+  def foo
+    "bar"
   end
 end
 
