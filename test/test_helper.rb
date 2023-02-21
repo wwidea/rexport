@@ -91,7 +91,7 @@ class Enrollment < ApplicationRecord
   include Rexport::DataFields
   belongs_to :student
   belongs_to :status
-  belongs_to :ilp_status, class_name: "Status", foreign_key: "ilp_status_id"
+  belongs_to :ilp_status, class_name: "Status"
   belongs_to :self_referential_check
 
   def foo
