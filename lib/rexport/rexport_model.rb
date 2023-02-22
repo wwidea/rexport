@@ -4,6 +4,8 @@ module Rexport # :nodoc:
   class RexportModel
     attr_accessor :klass, :path
 
+    delegate :name, to: :klass
+
     def initialize(klass, path: nil)
       self.klass = klass
       self.path = path.to_s unless path.blank?
@@ -34,10 +36,6 @@ module Rexport # :nodoc:
       return field.method unless field.method.include?(".")
       association = field.method.split(".").first
       klass.reflect_on_association(association.to_sym).foreign_key
-    end
-
-    def name
-      klass.name
     end
 
     # Adds a data item to rexport_fields
