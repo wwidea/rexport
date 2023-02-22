@@ -20,6 +20,16 @@ Layout/LineLength:
   Max: 200
 
 
+# Metrics
+Metrics/ClassLength:
+  Max: 150
+
+
+# Rails
+Rails/SkipsModelValidations:
+  Enabled: false
+
+
 # Style
 Style/ClassAndModuleChildren:
   Exclude:
