@@ -43,7 +43,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
     create(:second_grade_enrollment)
 
     assert_equal 2, Enrollment.count
-    assert_equal [["1", "active"]], create(:filtered_export).records
+    assert_equal [%w[1 active]], create(:filtered_export).records
   end
 
   test "should return error message for records when export has an invalid filter" do
@@ -122,7 +122,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
   end
 
   test "should return false for has_rexport_field?" do
-    refute build(:export).has_rexport_field?("student.family.number")
+    assert_not build(:export).has_rexport_field?("student.family.number")
   end
 
   test "should save export_items from a hash" do
