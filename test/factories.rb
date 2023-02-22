@@ -2,9 +2,7 @@
 
 module Rexport
   module Factories
-
     FactoryBot.define do
-
       factory :status do
         name { "active" }
       end
