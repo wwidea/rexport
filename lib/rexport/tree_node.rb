@@ -15,7 +15,8 @@ module Rexport #:nodoc:
     # Add one or more children to the tree
     def add_child(*names)
       names.flatten!
-      return unless name = names.shift
+      return unless (name = names.shift)
+
       node = children.find { |c| c.name == name }
       node ? node.add_child(names) : (children << TreeNode.new(name, names))
     end
