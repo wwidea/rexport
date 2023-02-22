@@ -28,7 +28,7 @@ module ActiveSupport
     private
 
     def setup_db # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-      ActiveRecord::Schema.define(version: 1) do # rubocop:disable Metrics/BlockLength
+      ActiveRecord::Schema.define(version: 1) do
         create_table :enrollments do |t|
           t.integer :student_id, :status_id, :grade
           t.boolean :active
@@ -69,6 +69,7 @@ module ActiveSupport
         end
 
         create_table :self_referential_checks do |t| # rubocop:disable Lint/EmptyBlock
+          # this is a comment
         end
       end
     end

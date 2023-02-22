@@ -21,6 +21,11 @@ Layout/LineLength:
 
 
 # Metrics
+Metrics/BlockLength:
+  Exclude:
+    - test/factories.rb
+    - test/test_helper.rb
+
 Metrics/ClassLength:
   Max: 200
 
