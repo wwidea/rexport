@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Rexport #:nodoc:
+module Rexport # :nodoc:
   # A basic tree for building up ActiveRecord find :include parameters
   class TreeNode
     attr_accessor :name, :children

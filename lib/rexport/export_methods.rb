@@ -2,7 +2,7 @@
 
 require "csv"
 
-module Rexport #:nodoc:
+module Rexport # :nodoc:
   module ExportMethods
     extend ActiveSupport::Concern
 

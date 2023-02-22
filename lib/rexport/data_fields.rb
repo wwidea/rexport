@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Rexport #:nodoc:
+module Rexport # :nodoc:
   module DataFields
     extend ActiveSupport::Concern
 

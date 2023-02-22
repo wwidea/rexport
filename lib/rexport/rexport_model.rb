@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Rexport #:nodoc:
+module Rexport # :nodoc:
   class RexportModel
     attr_accessor :klass, :path
 
