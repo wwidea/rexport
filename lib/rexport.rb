@@ -16,6 +16,6 @@ module Rexport
   SAMPLE_SIZE = 5
 
   class Engine < ::Rails::Engine
-    config.paths["app/views"] << File.join(File.dirname(__FILE__),"../app/views")
+    config.paths["app/views"] << File.join(File.dirname(__FILE__), "../app/views")
   end
 end

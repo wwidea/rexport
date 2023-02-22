@@ -23,6 +23,6 @@ class DataFieldTest < ActiveSupport::TestCase
     a = Rexport::DataField.new(:a)
     b = Rexport::DataField.new(:b)
 
-    assert_equal [a,b], [b,a].sort
+    assert_equal [a, b], [b, a].sort
   end
 end

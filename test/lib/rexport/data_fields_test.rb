@@ -3,7 +3,6 @@
 require "test_helper"
 
 class DataFieldsTest < ActiveSupport::TestCase
-
   class RexportClassMethodsTest < DataFieldsTest
     test "should get klass from assocations" do
       assert_equal Family, Enrollment.get_klass_from_associations("student", "family")
