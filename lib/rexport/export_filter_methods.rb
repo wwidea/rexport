@@ -31,7 +31,7 @@ module Rexport # :nodoc:
     end
 
     def filter_association
-      @filter_on_assocation ||= find_filter_association
+      @filter_association ||= find_filter_association
     end
 
     def find_filter_association
