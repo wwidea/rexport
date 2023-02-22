@@ -21,11 +21,12 @@ module Rexport # :nodoc:
 
     def associated_object_value
       return "UNDEFINED ASSOCIATION" unless filter_association
+
       begin
         object = filter_association.klass.find(value)
-        return object.respond_to?(:name) ? object.name : object.to_s
+        object.respond_to?(:name) ? object.name : object.to_s
       rescue ActiveRecord::RecordNotFound
-        return "ASSOCIATED OBJECT NOT FOUND"
+        "ASSOCIATED OBJECT NOT FOUND"
       end
     end
 
