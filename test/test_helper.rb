@@ -69,7 +69,7 @@ module ActiveSupport
         end
 
         create_table :self_referential_checks do |t|
-          t.inter :enrollment_id
+          t.integer :enrollment_id
         end
       end
     end
