@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class RexportModel < ActiveSupport::TestCase
+class RexportModelTest < ActiveSupport::TestCase
   test "should initialize rexport_fields" do
     assert_equal(
       %w[active bad_method created_at foo_method grade ilp_status_name status_name updated_at],
