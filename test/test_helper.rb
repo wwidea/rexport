@@ -68,8 +68,8 @@ module ActiveSupport
           t.string :filter_field, :value
         end
 
-        create_table :self_referential_checks do |t| # rubocop:disable Lint/EmptyBlock
-          # this is a comment
+        create_table :self_referential_checks do |t|
+          t.inter :enrollment_id
         end
       end
     end
@@ -146,6 +146,8 @@ class ExportFilter < ApplicationRecord
   include Rexport::ExportFilterMethods
 end
 
+# Creates a self-referential belongs_to association loop with Enrollment. Used for testing that two
+# models that belong to each other do not cause an infinite loop.
 class SelfReferentialCheck < ApplicationRecord
   include Rexport::DataFields
   belongs_to :enrollment
