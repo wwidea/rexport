@@ -9,6 +9,7 @@ module Rexport # :nodoc:
       def get_klass_from_associations(*associations)
         associations.flatten!
         return self if associations.empty?
+
         reflect_on_association(associations.shift.to_sym).klass.get_klass_from_associations(associations)
       end
     end

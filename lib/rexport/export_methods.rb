@@ -82,6 +82,7 @@ module Rexport # :nodoc:
     # Returns a class based on a path array
     def get_klass_from_path(path, klass = export_model)
       return klass unless (association_name = path.shift)
+
       get_klass_from_path(path, klass.reflect_on_association(association_name.to_sym).klass)
     end
 
