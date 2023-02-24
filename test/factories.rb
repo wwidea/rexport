@@ -21,7 +21,7 @@ module Rexport
         status      { |status|  status.association(:status) }
         student     { |student| student.association(:student) }
         grade       { 1 }
-        updated_at  { Time.now }
+        updated_at  { Time.current }
       end
 
       factory :second_grade_enrollment, class: "Enrollment" do

@@ -29,7 +29,7 @@ class DataFieldsTest < ActiveSupport::TestCase
     end
 
     test "should format date for export" do
-      assert_equal [Time.now.strftime("%m/%d/%y")], build(:enrollment).export("updated_at")
+      assert_equal [Time.current.strftime("%m/%d/%y")], build(:enrollment).export("updated_at")
     end
 
     test "should export Y for true" do
