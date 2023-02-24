@@ -144,7 +144,7 @@ class RexportModelTest < ActiveSupport::TestCase
     rexport_model.rexport_fields[name]
   end
 
-  def assert_fields_length(rexport: rexport_model, change: 1, &block)
+  def assert_fields_length(rexport: rexport_model, change: 1)
     assert_difference("rexport.rexport_fields.length", change) do
       yield(rexport)
     end
