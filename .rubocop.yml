@@ -31,6 +31,9 @@ Metrics/ClassLength:
 
 
 # Rails
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 Rails/SkipsModelValidations:
   Enabled: false
 
