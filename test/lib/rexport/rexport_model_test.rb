@@ -35,6 +35,12 @@ class RexportModelTest < ActiveSupport::TestCase
     end
   end
 
+  test "should add single method for multiple associations" do
+    assert_fields_length(change: 3) do |rexport|
+      rexport.add_association_methods(associations: %w[a1 a2 a3], methods: "foo")
+    end
+  end
+
   test "should add multiple methods for multiple associations" do
     assert_fields_length(change: 9) do |rexport|
       rexport.add_association_methods(associations: %w[a1 a2 a3], methods: %w[m1 m2 m3])
@@ -104,8 +110,12 @@ class RexportModelTest < ActiveSupport::TestCase
     )
   end
 
-  test "should return field_path" do
+  test "should return field_path when path is a string" do
     assert_equal "foo.bar", rexport_model(path: "foo").field_path("bar")
+  end
+
+  test "should return field_path when path is nil" do
+    assert_equal "bar", rexport_model.field_path("bar")
   end
 
   test "should return collection_from_association" do

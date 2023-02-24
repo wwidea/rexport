@@ -8,12 +8,12 @@ module Rexport # :nodoc:
 
     def initialize(klass, path: nil)
       self.klass = klass
-      self.path = path.to_s unless path.blank?
+      self.path = path&.to_s
       initialize_rexport_fields
     end
 
     def rexport_fields
-      @rexport_fields ||= HashWithIndifferentAccess.new
+      @rexport_fields ||= ActiveSupport::HashWithIndifferentAccess.new
     end
 
     def rexport_fields_array
@@ -34,6 +34,7 @@ module Rexport # :nodoc:
 
     def filter_column(field)
       return field.method unless field.method.include?(".")
+
       association = field.method.split(".").first
       klass.reflect_on_association(association.to_sym).foreign_key
     end
@@ -57,31 +58,21 @@ module Rexport # :nodoc:
       options.stringify_keys!
       options.assert_valid_keys(%w[associations methods filter])
 
-      methods = options.reverse_merge("methods" => "name")["methods"]
-      methods = [methods] if methods.is_a?(String)
-
-      associations = options["associations"]
-      associations = [associations] if associations.is_a?(String)
-
-      type = options["filter"] ? :association : nil
-
-      associations.each do |association|
-        methods.each do |method|
-          add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
-        end
-      end
+      add_rexport_fields_for(
+        associations: [options["associations"]].flatten,
+        methods:      [options["methods"] || "name"].flatten,
+        type:         (options["filter"] ? :association : nil)
+      )
     end
 
     # Returns an array of export methods corresponding with field_names
     def get_rexport_methods(*field_names)
       field_names.flatten.map do |f|
-        begin
-          components = f.to_s.split(".")
-          field_name = components.pop
-          components.push(get_rexport_model(components).get_rexport_method(field_name)) * "."
-        rescue NoMethodError
-          "undefined_rexport_field"
-        end
+        components = f.to_s.split(".")
+        field_name = components.pop
+        components.push(get_rexport_model(components).get_rexport_method(field_name)) * "."
+      rescue NoMethodError
+        "undefined_rexport_field"
       end
     end
 
@@ -101,14 +92,18 @@ module Rexport # :nodoc:
 
     # Returns the export method for a given field_name
     def get_rexport_method(field_name)
-      if rexport_fields[field_name]
-        rexport_fields[field_name].method
-      else
-        raise NoMethodError
-      end
+      rexport_fields[field_name]&.method || raise(NoMethodError)
     end
 
     private
+
+    def add_rexport_fields_for(associations:, methods:, type:)
+      associations.each do |association|
+        methods.each do |method|
+          add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
+        end
+      end
+    end
 
     def initialize_rexport_fields
       klass.content_columns.each { |field| add_rexport_field(field.name, type: field.type) }
