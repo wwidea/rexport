@@ -29,6 +29,9 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 200
 
+Metrics/ModuleLength:
+  Max: 200
+
 
 # Rails
 Rails/I18nLocaleTexts:
