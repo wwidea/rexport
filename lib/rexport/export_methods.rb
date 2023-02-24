@@ -162,7 +162,7 @@ module Rexport # :nodoc:
 
     def build_include
       root = Rexport::TreeNode.new("root")
-      (rexport_methods + filter_fields).select {|m| m.include?(".")}.each do |method|
+      (rexport_methods + filter_fields).select { |m| m.include?(".") }.each do |method|
         root.add_child(method.split(".").values_at(0..-2))
       end
       root.to_include
