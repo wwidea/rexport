@@ -220,7 +220,7 @@ module Rexport # :nodoc:
 
     def find_unique_name(original_name, suffix = 0)
       new_name = suffix.zero? ? "#{original_name} Copy" : "#{original_name} Copy [#{suffix}]"
-      self.class.find_by(name: new_name) ? find_unique_name(original_name, suffix += 1) : new_name
+      self.class.find_by(name: new_name) ? find_unique_name(original_name, suffix + 1) : new_name
     end
 
     def set_position
