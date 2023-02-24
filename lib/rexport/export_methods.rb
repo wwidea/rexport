@@ -142,13 +142,15 @@ module Rexport # :nodoc:
 
     def get_rexport_models(model, results = [], path = nil)
       return unless model.include?(Rexport::DataFields)
+
       results << RexportModel.new(model, path: path)
       get_associations(model).each do |associated_model|
         # prevent infinite loop by checking if this class is already in the results set
         next if results.detect { |result| result.klass == associated_model.klass }
+
         get_rexport_models(associated_model.klass, results, [path, associated_model.name].compact * ".")
       end
-      return results
+      results
     end
 
     def get_associations(model)
@@ -166,7 +168,7 @@ module Rexport # :nodoc:
     end
 
     def build_conditions
-      Hash.new.tap do |conditions|
+      {}.tap do |conditions|
         export_filters.each do |filter|
           conditions[get_database_field(filter.filter_field)] = filter.value
         end
@@ -196,18 +198,20 @@ module Rexport # :nodoc:
     end
 
     def save_export_items
-      export_items.each do |export_item|
-        unless rexport_fields.include?(export_item.rexport_field)
-          export_item.destroy
+      export_items.where.not(rexport_field: rexport_fields).destroy_all
+
+      rexport_fields.each.with_index(1) do |rexport_field, position|
+        find_or_create_export_item(rexport_field).tap do |export_item|
+          export_item.update_attribute(:position, position) if set_position
         end
       end
 
-      rexport_fields.each.with_index(1) do |rexport_field, position|
-        export_item = export_items.detect { |i| i.rexport_field == rexport_field } || export_items.create(rexport_field: rexport_field)
-        export_item.update_attribute(:position, position) if set_position
-      end
+      true
+    end
 
-      return true
+    # Uses array find to search in memory export_items assocation instead of performing a SQL query on every iteration
+    def find_or_create_export_item(rexport_field)
+      export_items.find { |export_item| export_item.rexport_field == rexport_field } || export_items.create(rexport_field: rexport_field)
     end
 
     def attributes_for_copy
