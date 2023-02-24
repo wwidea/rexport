@@ -30,12 +30,7 @@ module Rexport # :nodoc:
 
     # Returns a string with the export data
     def to_s
-      String.new.tap do |result|
-        result << header * "|" << "\n"
-        records.each do |record|
-          result << record * "|" << "\n"
-        end
-      end
+      records.unshift(header).map { |line| line.join("|") }.join("\n")
     end
 
     # Returns a csv string with the export data
@@ -103,13 +98,11 @@ module Rexport # :nodoc:
     def export_filter_attributes=(attributes)
       attributes.each do |field, value|
         if value.blank?
-          filter = export_filters.find_by(filter_field: field)
-          filter.destroy if filter
+          export_filters.find_by(filter_field: field)&.destroy
         elsif new_record?
           export_filters.build(filter_field: field, value: value)
         else
-          filter = export_filters.find_or_create_by(filter_field: field)
-          filter.update_attribute(:value, value)
+          export_filters.find_or_create_by(filter_field: field).update_attribute(:value, value)
         end
       end
     end

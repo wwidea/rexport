@@ -61,14 +61,14 @@ class ExportMethodsTest < ActiveSupport::TestCase
   end
 
   test "should return to_s with no records" do
-    assert_equal "Family Name|Grade|Status|Bogus Item\n", create(:export).to_s
+    assert_equal "Family Name|Grade|Status|Bogus Item", create(:export).to_s
   end
 
   test "should return to_s with record" do
     create(:enrollment)
 
     assert_equal(
-      "Family Name|Grade|Status|Bogus Item\nThe Sample Family|1|active|UNDEFINED EXPORT FIELD\n",
+      "Family Name|Grade|Status|Bogus Item\nThe Sample Family|1|active|UNDEFINED EXPORT FIELD",
       create(:export).to_s
     )
   end
