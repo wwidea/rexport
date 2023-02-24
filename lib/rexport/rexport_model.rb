@@ -58,10 +58,10 @@ module Rexport # :nodoc:
       options.assert_valid_keys(%w[associations methods filter])
 
       methods = options.reverse_merge("methods" => "name")["methods"]
-      methods = [methods] if methods.kind_of?(String)
+      methods = [methods] if methods.is_a?(String)
 
       associations = options["associations"]
-      associations = [associations] if associations.kind_of?(String)
+      associations = [associations] if associations.is_a?(String)
 
       type = options["filter"] ? :association : nil
 
