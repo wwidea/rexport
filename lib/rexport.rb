@@ -9,6 +9,7 @@ require "rexport/export_item_sortings_controller_methods"
 require "rexport/export_items_controller_methods"
 require "rexport/export_methods"
 require "rexport/exports_controller_methods"
+require "rexport/formatter"
 require "rexport/rexport_model"
 require "rexport/tree_node"
 
