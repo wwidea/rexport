@@ -12,8 +12,8 @@ module Rexport
       self.type = options[:type]
     end
 
-    def <=>(rf)
-      self.name <=> rf.name
+    def <=>(other)
+      name <=> other.name
     end
   end
 end
