@@ -17,15 +17,9 @@ module Rexport # :nodoc:
     # Return an array of formatted export values for the passed methods
     def export(*methods)
       methods.flatten.map do |method|
-        case value = (eval("self.#{method}", binding) rescue nil)
-          when Date, Time
-            value.strftime("%m/%d/%y")
-          when TrueClass
-            "Y"
-          when FalseClass
-            "N"
-          else value.to_s
-        end
+        Rexport::Formatter.convert(instance_eval(method))
+      rescue NameError
+        ""
       end
     end
 
