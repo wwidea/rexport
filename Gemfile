@@ -7,8 +7,8 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gemspec
 
 gem "factory_bot"
-gem "guard-shell"
 gem "guard"
+gem "guard-shell"
 gem "mocha"
 gem "rubocop-minitest",     require: false
 gem "rubocop-packaging",    require: false
