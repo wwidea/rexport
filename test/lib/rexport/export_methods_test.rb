@@ -117,12 +117,18 @@ class ExportMethodsTest < ActiveSupport::TestCase
     )
   end
 
-  test "should return true for has_rexport_field?" do
-    assert build(:export).has_rexport_field?("student.family.name")
+  test "should raise deprecation warning for has_rexport_field?" do
+    assert_deprecated do
+      build(:export).has_rexport_field?("student.family.name")
+    end
   end
 
-  test "should return false for has_rexport_field?" do
-    assert_not build(:export).has_rexport_field?("student.family.number")
+  test "should return true for rexport_field?" do
+    assert build(:export).rexport_field?("student.family.name")
+  end
+
+  test "should return false for rexport_field?" do
+    assert_not build(:export).rexport_field?("student.family.number")
   end
 
   test "should save export_items from a hash" do

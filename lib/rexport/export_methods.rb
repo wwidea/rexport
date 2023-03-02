@@ -81,7 +81,12 @@ module Rexport # :nodoc:
       get_klass_from_path(path, klass.reflect_on_association(association_name.to_sym).klass)
     end
 
-    def has_rexport_field?(rexport_field)
+    def has_rexport_field?(rexport_field) # rubocop:disable Naming/PredicateName
+      ActiveSupport::Deprecation.warn("Calling #has_rexport_field? is deprecated. Use #rexport_field? instead")
+      rexport_field?(rexport_field)
+    end
+
+    def rexport_field?(rexport_field)
       rexport_fields.include?(rexport_field)
     end
 
