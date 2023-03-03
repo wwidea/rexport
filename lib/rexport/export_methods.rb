@@ -90,14 +90,12 @@ module Rexport # :nodoc:
       rexport_fields.include?(rexport_field)
     end
 
-    def rexport_fields=(rexport_fields)
-      @rexport_fields = if rexport_fields.respond_to?(:keys)
-        @set_position = false
-        rexport_fields.keys.map(&:to_s)
-      else
-        @set_position = true
-        rexport_fields.map(&:to_s)
-      end
+    # Stores rexport_field names to update the export_items association after save
+    # Expects fields to be a hash with field names as the keys or an array of field names:
+    # { "field_one" => "1", "field_two" => "1"}
+    # [ "field_one", "field_two"]
+    def rexport_fields=(fields)
+      @rexport_fields = extract_rexport_fields(fields).map(&:to_s)
     end
 
     def export_filter_attributes=(attributes)
@@ -220,6 +218,15 @@ module Rexport # :nodoc:
     def find_unique_name(original_name, suffix = 0)
       new_name = suffix.zero? ? "#{original_name} Copy" : "#{original_name} Copy [#{suffix}]"
       self.class.find_by(name: new_name) ? find_unique_name(original_name, suffix + 1) : new_name
+    end
+
+    def extract_rexport_fields(fields)
+      # When fields is a hash return the keys and do not update export_item positions on save
+      return fields.keys if fields.respond_to?(:keys)
+
+      # When fields is an array update export item positions on save
+      @set_position = true
+      fields
     end
 
     def set_position

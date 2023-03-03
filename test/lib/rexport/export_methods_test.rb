@@ -164,6 +164,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
 
   test "should not re-order export_items when passed a hash of export_fields on update" do
     export = create_export(fields: %w[a b c])
+    export.instance_variable_set(:@set_position, nil)
     export.update_attribute(:rexport_fields, { c: 1, b: 1, a: 1 })
 
     assert_equal %w[a b c], rexport_fields_for(export)
