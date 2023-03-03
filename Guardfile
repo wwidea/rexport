@@ -16,6 +16,7 @@ end
 class Guard::Shell
   def run_all
     run_test
+    system("bundle exec rubocop")
   end
 
   def run_on_modifications(paths = [])
