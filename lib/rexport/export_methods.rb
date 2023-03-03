@@ -92,8 +92,8 @@ module Rexport # :nodoc:
 
     # Stores rexport_field names to update the export_items association after save
     # Expects fields to be a hash with field names as the keys or an array of field names:
-    # { "field_one" => "1", "field_two" => "1"}
-    # [ "field_one", "field_two"]
+    # { "field_one" => "1", "field_two" => "1" }
+    # ["field_one", "field_two"]
     def rexport_fields=(fields)
       @rexport_fields = extract_rexport_fields(fields).map(&:to_s)
     end
