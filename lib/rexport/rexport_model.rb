@@ -33,10 +33,7 @@ module Rexport # :nodoc:
     end
 
     def filter_column(field)
-      return field.method unless field.method.include?(".")
-
-      association = field.method.split(".").first
-      klass.reflect_on_association(association.to_sym).foreign_key
+      foreign_key_for(field.association_name) || field.method
     end
 
     # Adds a data item to rexport_fields
@@ -103,6 +100,10 @@ module Rexport # :nodoc:
           add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
         end
       end
+    end
+
+    def foreign_key_for(association_name)
+      klass.reflect_on_association(association_name).foreign_key if association_name.present?
     end
 
     def initialize_rexport_fields
