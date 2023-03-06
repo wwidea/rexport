@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rexport
   module ExportsControllerMethods
     def index
@@ -9,7 +11,7 @@ module Rexport
 
       respond_to do |format|
         format.html # show.html.erb
-        format.csv { send_data(export.to_csv, type: export_content_type, filename: filename) }
+        format.csv { send_data(export.to_csv, filename: filename) }
       end
     end
 
@@ -25,7 +27,7 @@ module Rexport
       @export = params[:original_export_id] ? Export.find(params[:original_export_id]).copy : Export.new(export_params)
 
       if @export.save
-        redirect_to @export, notice: 'Export was successfully created.'
+        redirect_to @export, notice: "Export was successfully created."
       else
         render :new
       end
@@ -33,7 +35,7 @@ module Rexport
 
     def update
       if export.update(export_params)
-        redirect_to export, notice: 'Export was successfully updated.'
+        redirect_to export, notice: "Export was successfully updated."
       else
         render :edit
       end
@@ -60,17 +62,15 @@ module Rexport
         :name,
         :model_class_name,
         :description,
-        rexport_fields: {},
-        export_filter_attributes: {}
+        {
+          rexport_fields:           {},
+          export_filter_attributes: {}
+        }
       ]
     end
 
-    def export_content_type
-      request.user_agent =~ /windows/i ? 'application/vnd.ms-excel' : 'text/csv'
-    end
-
     def filename
-      "#{export.model_class_name}_#{export.name.gsub(/ /, '_')}_#{Time.now.strftime('%Y%m%d')}.csv"
+      "#{export.model_class_name}_#{export.name.tr(' ', '_')}_#{Time.current.strftime('%Y%m%d')}.csv"
     end
   end
 end

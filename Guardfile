@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 guard :shell do
-  directories %w(lib test)
+  directories %w[lib test]
 
   # lib directory
   watch(%r{^lib/(.+)\.rb$}) { |m| "test/lib/#{m[1]}_test.rb" }
@@ -8,12 +10,13 @@ guard :shell do
   watch(%r{^test/.+_test\.rb$})
 
   # test_helper
-  watch(%r{^test/test_helper\.rb$}) { 'test' }
+  watch(%r{^test/test_helper\.rb$}) { "test" }
 end
 
 class Guard::Shell
   def run_all
     run_test
+    system("bundle exec rubocop")
   end
 
   def run_on_modifications(paths = [])

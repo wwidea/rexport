@@ -1,4 +1,6 @@
-module Rexport #:nodoc:
+# frozen_string_literal: true
+
+module Rexport # :nodoc:
   module ExportItemMethods
     extend ActiveSupport::Concern
 
@@ -17,14 +19,14 @@ module Rexport #:nodoc:
       def resort(export_item_ids)
         transaction do
           export_item_ids.each_with_index do |id, index|
-            find(id.gsub(/[^0-9]/, '')).update_attribute(:position, index + 1)
+            find(id.gsub(/[^0-9]/, "")).update_attribute(:position, index + 1)
           end
         end
       end
     end
 
     def attributes_for_copy
-      attributes.slice('position', 'name', 'rexport_field')
+      attributes.slice("position", "name", "rexport_field")
     end
 
     private
@@ -34,7 +36,7 @@ module Rexport #:nodoc:
     end
 
     def generate_name_from_rexport_field
-      rexport_field.split('.').last(2).map(&:titleize).join(' - ')
+      rexport_field.split(".").last(2).map(&:titleize).join(" - ")
     end
   end
 end

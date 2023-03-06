@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rexport
   module ExportItemsControllerMethods
     def edit
@@ -6,7 +8,7 @@ module Rexport
 
     def update
       if export_item.update(export_item_params)
-        redirect_to export_path(export_item.export), notice: 'ExportItem was successfully updated.'
+        redirect_to export_path(export_item.export), notice: "ExportItem was successfully updated."
       else
         render :edit
       end

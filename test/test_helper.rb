@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails"
 require "active_record"
 require "rexport"
@@ -8,111 +10,103 @@ require File.expand_path("../test/factories", __dir__)
 
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
-class ActiveSupport::TestCase
-  include FactoryBot::Syntax::Methods
-  include Rexport::Factories
+module ActiveSupport
+  class TestCase
+    include FactoryBot::Syntax::Methods
+    include Rexport::Factories
 
-  def setup
-    suppress_output { setup_db }
-    Enrollment.instance_variable_set('@rexport_fields', nil)
-    Student.instance_variable_set('@rexport_fields', nil)
-  end
+    def setup
+      ActiveRecord::Migration.suppress_messages { setup_db }
+      Enrollment.instance_variable_set(:@rexport_fields, nil)
+      Student.instance_variable_set(:@rexport_fields, nil)
+    end
 
-  def teardown
-    teardown_db
-  end
+    def teardown
+      teardown_db
+    end
 
-  private
+    private
 
-  def setup_db
-    ActiveRecord::Schema.define(version: 1) do
-      create_table :enrollments do |t|
-        t.integer :student_id, :status_id, :grade
-        t.boolean :active
-        t.timestamps
-      end
+    def setup_db # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      ActiveRecord::Schema.define(version: 1) do
+        create_table :enrollments do |t|
+          t.integer :student_id, :status_id, :grade
+          t.boolean :active
+          t.timestamps
+        end
 
-      create_table :students do |t|
-        t.integer :family_id
-        t.string :name
-        t.date :date_of_birth
-        t.timestamps
-      end
+        create_table :students do |t|
+          t.integer :family_id
+          t.string :name
+          t.date :date_of_birth
+          t.timestamps
+        end
 
-      create_table :families do |t|
-        t.string :name
-        t.timestamps
-      end
+        create_table :families do |t|
+          t.string :name
+          t.timestamps
+        end
 
-      create_table :statuses do |t|
-        t.string :name
-      end
+        create_table :statuses do |t|
+          t.string :name
+        end
 
-      create_table :exports do |t|
-        t.string :name
-        t.string :model_class_name
-        t.text :description
-      end
+        create_table :exports do |t|
+          t.string :name
+          t.string :model_class_name
+          t.text :description
+        end
 
-      create_table :export_items do |t|
-        t.integer :export_id
-        t.string :name, :rexport_field
-        t.integer :position
-      end
+        create_table :export_items do |t|
+          t.integer :export_id
+          t.string :name, :rexport_field
+          t.integer :position
+        end
 
-      create_table :export_filters do |t|
-        t.integer :export_id
-        t.string :filter_field, :value
-      end
+        create_table :export_filters do |t|
+          t.integer :export_id
+          t.string :filter_field, :value
+        end
 
-      create_table :self_referential_checks do |t|
+        create_table :self_referential_checks do |t|
+          t.integer :enrollment_id
+        end
       end
     end
-  end
 
-  def teardown_db
-    ActiveRecord::Base.connection.data_sources.each do |table|
-      ActiveRecord::Base.connection.drop_table(table)
-    end
-  end
-
-  def suppress_output
-    original_stdout = $stdout.clone
-    $stdout.reopen File.new('/dev/null', 'w')
-    yield
-  ensure
-    $stdout.reopen original_stdout
-  end
-end
-
-class ActiveRecord::Base
-  class << self
-    def acts_as_list(options = {})
+    def teardown_db
+      ActiveRecord::Base.connection.data_sources.each do |table|
+        ActiveRecord::Base.connection.drop_table(table)
+      end
     end
   end
 end
 
-class Enrollment < ActiveRecord::Base
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+
+  def self.acts_as_list(_options = {}); end
+end
+
+class Enrollment < ApplicationRecord
   include Rexport::DataFields
   belongs_to :student
   belongs_to :status
-  belongs_to :ilp_status, class_name: 'Status', foreign_key: 'ilp_status_id'
+  belongs_to :ilp_status, class_name: "Status"
   belongs_to :self_referential_check
-
-  def foo
-    'bar'
-  end
-
-  private
 
   def self.initialize_local_rexport_fields(rexport_model)
     rexport_model.add_rexport_field(:foo_method, method: :foo)
-    rexport_model.add_rexport_field(:bad_method, method: 'bad_method')
-    rexport_model.add_association_methods(associations: %w(status ilp_status))
+    rexport_model.add_rexport_field(:bad_method, method: "bad_method")
+    rexport_model.add_association_methods(associations: %w[status ilp_status])
+  end
+
+  def foo
+    "bar"
   end
 end
 
-class Student < ActiveRecord::Base
+class Student < ApplicationRecord
   include Rexport::DataFields
   belongs_to :family
   has_many :enrollments
@@ -122,39 +116,39 @@ class Student < ActiveRecord::Base
   end
 end
 
-class Family < ActiveRecord::Base
+class Family < ApplicationRecord
   include Rexport::DataFields
   has_many :students
-
-  def foo
-    'bar'
-  end
-
-  private
 
   def self.initialize_local_rexport_fields(rexport_model)
     rexport_model.add_rexport_field(:foo_method, method: :foo)
   end
+
+  def foo
+    "bar"
+  end
 end
 
-class Status < ActiveRecord::Base
+class Status < ApplicationRecord
   # does not include Rexport
   has_many :enrollments
 end
 
-class Export < ActiveRecord::Base
+class Export < ApplicationRecord
   include Rexport::ExportMethods
 end
 
-class ExportItem < ActiveRecord::Base
+class ExportItem < ApplicationRecord
   include Rexport::ExportItemMethods
 end
 
-class ExportFilter < ActiveRecord::Base
+class ExportFilter < ApplicationRecord
   include Rexport::ExportFilterMethods
 end
 
-class SelfReferentialCheck < ActiveRecord::Base
+# Creates a self-referential belongs_to association loop with Enrollment. Used for testing that two
+# models that belong to each other do not cause an infinite loop.
+class SelfReferentialCheck < ApplicationRecord
   include Rexport::DataFields
   belongs_to :enrollment
 end

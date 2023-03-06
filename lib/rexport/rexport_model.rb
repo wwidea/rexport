@@ -1,15 +1,19 @@
-module Rexport #:nodoc:
+# frozen_string_literal: true
+
+module Rexport # :nodoc:
   class RexportModel
     attr_accessor :klass, :path
 
+    delegate :name, to: :klass
+
     def initialize(klass, path: nil)
       self.klass = klass
-      self.path = path.to_s unless path.blank?
+      self.path = path&.to_s
       initialize_rexport_fields
     end
 
     def rexport_fields
-      @rexport_fields ||= HashWithIndifferentAccess.new
+      @rexport_fields ||= ActiveSupport::HashWithIndifferentAccess.new
     end
 
     def rexport_fields_array
@@ -17,7 +21,7 @@ module Rexport #:nodoc:
     end
 
     def field_path(field_name)
-      [path, field_name].compact * '.'
+      [path, field_name].compact * "."
     end
 
     def collection_from_association(association)
@@ -29,13 +33,7 @@ module Rexport #:nodoc:
     end
 
     def filter_column(field)
-      return field.method unless field.method.include?('.')
-      association = field.method.split('.').first
-      klass.reflect_on_association(association.to_sym).foreign_key
-    end
-
-    def name
-      klass.name
+      foreign_key_for(field.association_name) || field.method
     end
 
     # Adds a data item to rexport_fields
@@ -55,33 +53,23 @@ module Rexport #:nodoc:
     #   :filter - if true will send type: :association to add_report_field
     def add_association_methods(options = {})
       options.stringify_keys!
-      options.assert_valid_keys(%w(associations methods filter))
+      options.assert_valid_keys(%w[associations methods filter])
 
-      methods = options.reverse_merge('methods' => 'name')['methods']
-      methods = [methods] if methods.kind_of?(String)
-
-      associations = options['associations']
-      associations = [associations] if associations.kind_of?(String)
-
-      type = options['filter'] ? :association : nil
-
-      associations.each do |association|
-        methods.each do |method|
-          add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
-        end
-      end
+      add_rexport_fields_for(
+        associations: [options["associations"]].flatten,
+        methods:      [options["methods"] || "name"].flatten,
+        type:         (options["filter"] ? :association : nil)
+      )
     end
 
     # Returns an array of export methods corresponding with field_names
     def get_rexport_methods(*field_names)
       field_names.flatten.map do |f|
-        begin
-          components = f.to_s.split('.')
-          field_name = components.pop
-          components.push(get_rexport_model(components).get_rexport_method(field_name)) * '.'
-        rescue NoMethodError
-          'undefined_rexport_field'
-        end
+        components = f.to_s.split(".")
+        field_name = components.pop
+        components.push(get_rexport_model(components).get_rexport_method(field_name)) * "."
+      rescue NoMethodError
+        "undefined_rexport_field"
       end
     end
 
@@ -101,14 +89,22 @@ module Rexport #:nodoc:
 
     # Returns the export method for a given field_name
     def get_rexport_method(field_name)
-      if rexport_fields[field_name]
-        rexport_fields[field_name].method
-      else
-        raise NoMethodError
-      end
+      rexport_fields[field_name]&.method || raise(NoMethodError)
     end
 
     private
+
+    def add_rexport_fields_for(associations:, methods:, type:)
+      associations.each do |association|
+        methods.each do |method|
+          add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
+        end
+      end
+    end
+
+    def foreign_key_for(association_name)
+      klass.reflect_on_association(association_name).foreign_key if association_name.present?
+    end
 
     def initialize_rexport_fields
       klass.content_columns.each { |field| add_rexport_field(field.name, type: field.type) }
