@@ -1,6 +1,7 @@
 # https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
 
 require:
+  - rubocop-factory_bot
   - rubocop-minitest
   - rubocop-packaging
   - rubocop-performance
