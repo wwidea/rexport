@@ -113,7 +113,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
     )
     assert_equal(
       ["", "self_referential_check", "student", "student.family"],
-      export.rexport_models.map(&:path).map(&:to_s).sort
+      export.rexport_models.map { |model| model.path.to_s }.sort
     )
   end
 
