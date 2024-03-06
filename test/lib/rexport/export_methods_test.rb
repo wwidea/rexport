@@ -118,7 +118,7 @@ class ExportMethodsTest < ActiveSupport::TestCase
   end
 
   test "should raise deprecation warning for has_rexport_field?" do
-    assert_deprecated do
+    assert_deprecated(ActiveSupport.deprecator) do
       build(:export).has_rexport_field?("student.family.name")
     end
   end
