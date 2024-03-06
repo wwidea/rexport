@@ -25,11 +25,7 @@ module Rexport # :nodoc:
     end
 
     def collection_from_association(association)
-      if klass.respond_to?("find_#{association}_for_rexport")
-        klass.public_send("find_#{association}_for_rexport")
-      else
-        klass.reflect_on_association(association.to_sym).klass.all
-      end
+      klass.try(:"find_#{association}_for_rexport") || all_objects_from(association)
     end
 
     def filter_column(field)
@@ -94,6 +90,10 @@ module Rexport # :nodoc:
 
     private
 
+    def all_objects_from(association)
+      klass.reflect_on_association(association.to_sym).klass.all
+    end
+
     def add_rexport_fields_for(associations:, methods:, type:)
       associations.each do |association|
         methods.each do |method|
@@ -108,7 +108,7 @@ module Rexport # :nodoc:
 
     def initialize_rexport_fields
       klass.content_columns.each { |field| add_rexport_field(field.name, type: field.type) }
-      klass.initialize_local_rexport_fields(self) if klass.respond_to?(:initialize_local_rexport_fields)
+      klass.try(:initialize_local_rexport_fields, self)
     end
   end
 end
