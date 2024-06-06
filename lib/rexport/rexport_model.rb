@@ -97,7 +97,7 @@ module Rexport # :nodoc:
     def add_rexport_fields_for(associations:, methods:, type:)
       associations.each do |association|
         methods.each do |method|
-          add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type: type)
+          add_rexport_field("#{association}_#{method}", method: "#{association}.#{method}", type:)
         end
       end
     end

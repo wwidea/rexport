@@ -11,7 +11,7 @@ module Rexport
 
       respond_to do |format|
         format.html # show.html.erb
-        format.csv { send_data(export.to_csv, filename: filename) }
+        format.csv { send_data(export.to_csv, filename:) }
       end
     end
 

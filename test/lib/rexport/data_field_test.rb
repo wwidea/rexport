@@ -34,6 +34,6 @@ class DataFieldTest < ActiveSupport::TestCase
   private
 
   def data_field(name: :foo, method: nil, type: nil)
-    Rexport::DataField.new(name, method: method, type: type)
+    Rexport::DataField.new(name, method:, type:)
   end
 end
