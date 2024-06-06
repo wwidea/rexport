@@ -23,8 +23,8 @@ class DataFieldTest < ActiveSupport::TestCase
     assert_equal %w[a b], [data_field(name: :b), data_field(name: :a)].sort.map(&:name)
   end
 
-  test "should return first assocation from method chain for association_name" do
-    assert_equal "assocation_one", data_field(method: "assocation_one.assocation_two.method").association_name
+  test "should return first association from method chain for association_name" do
+    assert_equal "association_one", data_field(method: "association_one.association_two.method").association_name
   end
 
   test "should return nil for association_name when no dot operator is present" do
