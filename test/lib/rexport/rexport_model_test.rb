@@ -137,7 +137,7 @@ class RexportModelTest < ActiveSupport::TestCase
   private
 
   def rexport_model(model: Enrollment, path: nil)
-    Rexport::RexportModel.new(model, path: path)
+    Rexport::RexportModel.new(model, path:)
   end
 
   def data_field(name)

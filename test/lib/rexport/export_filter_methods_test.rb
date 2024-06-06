@@ -33,8 +33,8 @@ class ExportFilterMethodsTest < ActiveSupport::TestCase
   def export_filter(filter_field, value: 1)
     ExportFilter.new(
       export:       FactoryBot.create(:export),
-      filter_field: filter_field,
-      value:        value
+      filter_field:,
+      value:
     )
   end
 end

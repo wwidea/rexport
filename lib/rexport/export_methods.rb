@@ -103,7 +103,7 @@ module Rexport # :nodoc:
         if value.blank?
           export_filters.find_by(filter_field: field)&.destroy
         elsif new_record?
-          export_filters.build(filter_field: field, value: value)
+          export_filters.build(filter_field: field, value:)
         else
           export_filters.find_or_create_by(filter_field: field).update_attribute(:value, value)
         end
@@ -140,7 +140,7 @@ module Rexport # :nodoc:
     def get_rexport_models(model, results = [], path = nil)
       return unless model.include?(Rexport::DataFields)
 
-      results << RexportModel.new(model, path: path)
+      results << RexportModel.new(model, path:)
       get_associations(model).each do |associated_model|
         # prevent infinite loop by checking if this class is already in the results set
         next if results.detect { |result| result.klass == associated_model.klass }
@@ -208,7 +208,7 @@ module Rexport # :nodoc:
 
     # Uses array find to search in memory export_items assocation instead of performing a SQL query on every iteration
     def find_or_create_export_item(rexport_field)
-      export_items.find { |export_item| export_item.rexport_field == rexport_field } || export_items.create(rexport_field: rexport_field)
+      export_items.find { |export_item| export_item.rexport_field == rexport_field } || export_items.create(rexport_field:)
     end
 
     def attributes_for_copy
