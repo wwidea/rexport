@@ -21,5 +21,6 @@ Gem::Specification.new do |spec|
   end
 
   spec.required_ruby_version = ">= 3.1.0"
+  spec.add_runtime_dependency "csv", ">= 3.0"
   spec.add_runtime_dependency "rails", ">= 6.0.3"
 end
