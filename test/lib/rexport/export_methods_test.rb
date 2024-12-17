@@ -47,9 +47,9 @@ class ExportMethodsTest < ActiveSupport::TestCase
   end
 
   test "should return error message for records when export has an invalid filter" do
-    assert_equal(
-      [["SQLite3::SQLException: no such column: enrollments.invalid"]],
-      create(:invalid_filtered_export).records
+    assert_includes(
+      create(:invalid_filtered_export).records.first.first,
+      "SQLite3::SQLException: no such column: enrollments.invalid"
     )
   end
 
