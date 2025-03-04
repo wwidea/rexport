@@ -1,11 +1,13 @@
 # https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
 
-require:
-  - rubocop-factory_bot
+plugins:
   - rubocop-minitest
-  - rubocop-packaging
   - rubocop-performance
   - rubocop-rails
+
+require:
+  - rubocop-factory_bot
+  - rubocop-packaging
 
 AllCops:
   NewCops: enable
