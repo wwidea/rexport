@@ -1,12 +1,12 @@
 # https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
 
 plugins:
+  - rubocop-factory_bot
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
 
 require:
-  - rubocop-factory_bot
   - rubocop-packaging
 
 AllCops:
