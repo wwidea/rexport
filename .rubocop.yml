@@ -3,11 +3,9 @@
 plugins:
   - rubocop-factory_bot
   - rubocop-minitest
+  - rubocop-packaging
   - rubocop-performance
   - rubocop-rails
-
-require:
-  - rubocop-packaging
 
 AllCops:
   NewCops: enable
