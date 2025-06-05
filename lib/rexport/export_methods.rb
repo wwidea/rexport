@@ -197,8 +197,6 @@ module Rexport # :nodoc:
           export_item.update_attribute(:position, position) if set_position
         end
       end
-
-      true
     end
 
     # Uses array find to search in memory export_items assocation instead of performing a SQL query on every iteration
