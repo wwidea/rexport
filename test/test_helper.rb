@@ -90,6 +90,7 @@ end
 
 class Enrollment < ApplicationRecord
   include Rexport::DataFields
+
   belongs_to :student
   belongs_to :status
   belongs_to :ilp_status, class_name: "Status"
@@ -108,6 +109,7 @@ end
 
 class Student < ApplicationRecord
   include Rexport::DataFields
+
   belongs_to :family
   has_many :enrollments
 
@@ -118,6 +120,7 @@ end
 
 class Family < ApplicationRecord
   include Rexport::DataFields
+
   has_many :students
 
   def self.initialize_local_rexport_fields(rexport_model)
@@ -150,5 +153,6 @@ end
 # models that belong to each other do not cause an infinite loop.
 class SelfReferentialCheck < ApplicationRecord
   include Rexport::DataFields
+
   belongs_to :enrollment
 end
