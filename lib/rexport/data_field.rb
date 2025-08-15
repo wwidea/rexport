@@ -3,6 +3,7 @@
 module Rexport
   class DataField
     include Comparable
+
     attr_reader :name, :method, :type
 
     # Stores the name and method of the export data item
